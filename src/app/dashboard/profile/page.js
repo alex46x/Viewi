@@ -42,6 +42,7 @@ export default function ProfilePage() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [activeDropdownIdx, setActiveDropdownIdx] = useState(null);
+  const [linkToDelete, setLinkToDelete] = useState(null);
 
   useEffect(() => {
     fetchProfile();
@@ -102,9 +103,15 @@ export default function ProfilePage() {
   };
 
   const removeSocialLink = (index) => {
+    setLinkToDelete(index);
+  };
+
+  const confirmDelete = () => {
+    if (linkToDelete === null) return;
     const newList = [...user.socialLinks];
-    newList.splice(index, 1);
+    newList.splice(linkToDelete, 1);
     setUser({ ...user, socialLinks: newList });
+    setLinkToDelete(null);
   };
 
   const updateSocialLink = (index, field, value) => {
@@ -520,6 +527,41 @@ export default function ProfilePage() {
           />
         )}
       </form>
+
+      {/* Delete Confirmation Modal */}
+      {linkToDelete !== null && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"
+            onClick={() => setLinkToDelete(null)}
+          />
+          <div className="relative w-full max-w-[320px] bg-[#1c1c1e] rounded-[2rem] overflow-hidden shadow-2xl animate-in zoom-in-95 fade-in duration-300">
+            <div className="p-8 text-center space-y-2">
+              <h3 className="text-lg font-bold text-white">Delete this link?</h3>
+              <p className="text-sm text-white/60 leading-relaxed px-2">
+                Are you sure you want to delete this link?<br /> This action cannot be undone.
+              </p>
+            </div>
+            
+            <div className="flex border-t border-white/5 h-14">
+              <button
+                type="button"
+                onClick={() => setLinkToDelete(null)}
+                className="flex-1 text-[17px] font-medium text-[#0A84FF] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors border-r border-white/5"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="flex-1 text-[17px] font-medium text-[#FF453A] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
