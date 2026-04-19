@@ -50,6 +50,7 @@ export default function PrivacyPage() {
               We use essential cookies to maintain your session and ensure the security of your account. We do not use 
               tracking cookies for third-party advertising.
             </p>
+          </section>
 
           <section className="space-y-4 pt-8 border-t border-white/5">
             <p className="text-sm">
