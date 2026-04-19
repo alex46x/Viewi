@@ -159,10 +159,13 @@ export default function AuthCard({ initialMode = 'signup' }) {
   return (
     <div className="w-full max-w-[440px] animate-in fade-in zoom-in-95 duration-500">
       <div className="glass-card p-8 md:p-10 rounded-[40px] relative overflow-hidden">
-        {/* Close Button Placeholder (Matches reference) */}
-        <button className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/40">
+        {/* Close Button - Redirects to Homepage */}
+        <Link 
+          href="/"
+          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 transition-all text-white/40 hover:text-white hover:scale-110 active:scale-95 z-20"
+        >
           <X className="w-5 h-5" />
-        </button>
+        </Link>
 
         {authStep === 'username-select' ? (
           <div className="animate-in slide-in-from-right-8 duration-500">
@@ -342,8 +345,11 @@ export default function AuthCard({ initialMode = 'signup' }) {
           </>
         )}
 
-        <p className="mt-8 text-center text-[10px] text-white/20 font-medium">
-          By continuing, you agree to our <span className="text-white/40 cursor-pointer hover:text-white underline underline-offset-2">Terms of Service</span>
+        <p className="mt-8 text-center text-[10px] text-white/20 font-medium max-w-[280px] mx-auto leading-relaxed">
+          By continuing, you agree to our 
+          <Link href="/terms" className="text-white/40 hover:text-white underline underline-offset-4 transition-colors mx-1">Terms of Service</Link> 
+          and 
+          <Link href="/privacy" className="text-white/40 hover:text-white underline underline-offset-4 transition-colors mx-1">Privacy Policy</Link>
         </p>
       </div>
     </div>

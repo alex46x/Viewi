@@ -54,12 +54,17 @@ export async function POST(req) {
 
     const response = NextResponse.json({ success: true, uid });
 
+    // Create a Session Cookie instead of using the raw ID token
+    // This allows sessions to last up to 14 days (we'll use 7 days)
+    const expiresIn = 60 * 60 * 24 * 7 * 1000; // 7 days in milliseconds
+    const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
+
     // Set HTTP-only cookie
-    response.cookies.set('token', idToken, {
+    response.cookies.set('token', sessionCookie, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 604800, // 7 days (matches matchAge of ID tokens usually)
+      sameSite: 'lax',
+      maxAge: 604800, // 7 days in seconds
       path: '/',
     });
 

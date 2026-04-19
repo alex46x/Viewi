@@ -28,9 +28,12 @@ export default function DashboardLayout({ children }) {
         if (res.ok) {
           const data = await res.json();
           setUser(data);
+        } else if (res.status === 401) {
+          console.log('Session expired, logging out...');
+          handleLogout();
         }
       } catch (err) {
-        console.error('Failed to fetch user in layout');
+        console.error('Failed to fetch user in layout', err);
       }
     };
     fetchUser();

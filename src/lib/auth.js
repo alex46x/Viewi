@@ -4,14 +4,15 @@ export async function verifyToken(token) {
   if (!token) return null;
   
   try {
-    const decodedToken = await adminAuth.verifyIdToken(token);
+    // Verify the session cookie instead of ID token for long-term sessions
+    const decodedToken = await adminAuth.verifySessionCookie(token, true);
     return {
       userId: decodedToken.uid,
       username: decodedToken.name || decodedToken.email.split('@')[0],
       email: decodedToken.email
     };
   } catch (error) {
-    console.error('Token verification error:', error);
+    console.error('Session verification error:', error);
     return null;
   }
 }
