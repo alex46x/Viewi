@@ -483,7 +483,7 @@ export default function ProfilePage() {
                           type="button"
                           onClick={() => setActiveDropdownIdx(activeDropdownIdx === index ? null : index)}
                           className={cn(
-                            "w-full h-14 px-5 rounded-2xl bg-white/5 border border-white/10 text-sm font-bold flex items-center justify-between transition-all hover:bg-white/10",
+                            "w-full h-14 pl-5 pr-12 rounded-2xl bg-white/5 border border-white/10 text-sm font-bold flex items-center justify-between transition-all hover:bg-white/10",
                             activeDropdownIdx === index && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
                           )}
                         >
@@ -532,7 +532,7 @@ export default function ProfilePage() {
                       <div className="md:col-span-2 relative group/input">
                         <input
                           type="url"
-                          className="w-full h-14 px-6 rounded-2xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 hover:bg-white/[0.08] transition-all font-medium tracking-tight"
+                          className="w-full h-14 pl-6 pr-12 rounded-2xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 hover:bg-white/[0.08] transition-all font-medium tracking-tight"
                           placeholder="https://yourprofile.com/handle"
                           value={link.url}
                           onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
