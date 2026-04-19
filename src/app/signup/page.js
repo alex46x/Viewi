@@ -21,6 +21,12 @@ export default function SignupPage() {
       </Link>
 
       <AuthCard initialMode="signup" />
+
+      {/* Footer Links */}
+      <div className="mt-8 flex items-center gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-white/20 z-20">
+        <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+        <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+      </div>
     </div>
   );
 }

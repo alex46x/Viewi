@@ -111,8 +111,15 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="py-10 text-center text-muted-foreground border-t border-border mt-20">
-        <p>&copy; 2026 Viewi Link. All rights reserved.</p>
+      <footer className="py-12 border-t border-white/5 bg-white/[0.01]">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-sm text-muted-foreground">&copy; 2026 Viewi. All rights reserved.</p>
+          <div className="flex items-center gap-8 text-sm">
+            <Link href="/privacy" className="text-muted-foreground hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-muted-foreground hover:text-white transition-colors">Terms of Service</Link>
+            <a href="mailto:support@viewi.link" className="text-muted-foreground hover:text-white transition-colors">Support</a>
+          </div>
+        </div>
       </footer>
     </main>
   );
