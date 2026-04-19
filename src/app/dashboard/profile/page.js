@@ -105,6 +105,7 @@ export default function ProfilePage() {
   };
 
   const removeSocialLink = (index) => {
+    setActiveDropdownIdx(null); // Clear dropdowns so link cards don't stay highlighted/dimmed
     setLinkToDelete(index);
   };
 
