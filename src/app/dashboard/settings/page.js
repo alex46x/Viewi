@@ -1,10 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { Shield, Bell, Trash2, AlertCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Shield, Bell, Trash2, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [notifications, setNotifications] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    setError('');
+    try {
+      const res = await fetch('/api/user/delete', { method: 'POST' });
+      if (res.ok) {
+        router.push('/login');
+        router.refresh();
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Failed to delete account');
+        setDeleting(false);
+      }
+    } catch (err) {
+      setError('Connection error');
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="max-w-4xl space-y-8 animate-in fade-in duration-500">
@@ -58,10 +82,56 @@ export default function SettingsPage() {
         <p className="text-sm text-muted-foreground">
           Deleting your account is permanent and will remove all your data, including your unique username and analytics forever.
         </p>
-        <button className="px-6 py-3 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 font-bold hover:bg-red-500 hover:text-white transition-all flex items-center gap-2">
+        <button 
+          onClick={() => setShowDeleteModal(true)}
+          className="px-6 py-3 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 font-bold hover:bg-red-500 hover:text-white transition-all flex items-center gap-2"
+        >
           <AlertCircle className="w-4 h-4" /> Delete Account
         </button>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"
+            onClick={() => !deleting && setShowDeleteModal(false)}
+          />
+          <div className="relative w-full max-w-[320px] bg-[#1c1c1e] rounded-[2rem] overflow-hidden shadow-2xl animate-in zoom-in-95 fade-in duration-300 border border-white/5">
+            <div className="p-8 text-center space-y-3">
+              <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-2 text-red-500">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Delete Account?</h3>
+              <p className="text-sm text-white/50 leading-relaxed">
+                This action is irreversible. All your data, profile, and analytics will be permanently removed.
+              </p>
+              {error && (
+                <p className="text-xs text-red-500 bg-red-500/10 p-2 rounded-lg">{error}</p>
+              )}
+            </div>
+            
+            <div className="flex border-t border-white/5 h-14">
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 text-[17px] font-medium text-[#0A84FF] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors border-r border-white/5 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={handleDeleteAccount}
+                className="flex-1 text-[17px] font-bold text-[#FF453A] hover:bg-red-500/10 active:bg-red-500/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
