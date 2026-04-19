@@ -1,4 +1,6 @@
 import * as admin from 'firebase-admin';
+import fs from 'fs';
+import path from 'path';
 
 if (!admin.apps.length) {
   try {
@@ -15,12 +17,15 @@ if (!admin.apps.length) {
     // Only attempt to load serviceAccountKey.json in development environment
     else if (process.env.NODE_ENV === 'development') {
       try {
-        const serviceAccount = require('../../serviceAccountKey.json');
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount)
-        });
+        const jsonPath = path.join(process.cwd(), 'serviceAccountKey.json');
+        if (fs.existsSync(jsonPath)) {
+          const serviceAccount = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+          admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+          });
+        }
       } catch (e) {
-        console.warn('Firebase Admin: serviceAccountKey.json not found in development.');
+        console.warn('Firebase Admin: serviceAccountKey.json not found or invalid.');
       }
     }
   } catch (error) {
