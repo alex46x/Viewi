@@ -158,6 +158,13 @@
          focus:bg-white/[0.06] hover:border-white/20;
 }
 
+/* Fix for native select options visibility in dark mode */
+.input-field-premium option {
+  background-color: #09090b; /* Solid background for options */
+  color: #fafafa;
+  padding: 10px;
+}
+
 /* Animations */
 @keyframes entrance-fade {
   from { opacity: 0; transform: translateY(10px); }
