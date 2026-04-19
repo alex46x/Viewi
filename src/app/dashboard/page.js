@@ -54,8 +54,8 @@ export default function DashboardHome() {
           
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-lg">
             Your identity platform is <span className={cn("px-2 py-0.5 rounded-md font-bold", user.isPublic ? "bg-green-500/10 text-green-400" : "bg-yellow-500/10 text-yellow-400")}>
-              {user.isPublic ? 'Public' : 'Private'}
-            </span>. You've reached <span className="text-white font-bold">{data.totalViews}</span> total views.
+            {user?.isPublic ? 'Public' : 'Private'}
+            </span>. You've reached <span className="text-white font-bold">{data?.totalViews || 0}</span> total views.
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -91,7 +91,7 @@ export default function DashboardHome() {
             </div>
             <div>
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Total Views</p>
-              <h3 className="text-5xl font-black mt-2 text-white tabular-nums">{data.totalViews.toLocaleString()}</h3>
+              <h3 className="text-5xl font-black mt-2 text-white tabular-nums">{data?.totalViews?.toLocaleString() || '0'}</h3>
             </div>
           </div>
 
@@ -106,7 +106,7 @@ export default function DashboardHome() {
             </div>
             <div>
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Unique Visitors</p>
-              <h3 className="text-5xl font-black mt-2 text-white tabular-nums">{data.uniqueVisitors.toLocaleString()}</h3>
+              <h3 className="text-5xl font-black mt-2 text-white tabular-nums">{data?.uniqueVisitors?.toLocaleString() || '0'}</h3>
             </div>
           </div>
 
@@ -117,8 +117,8 @@ export default function DashboardHome() {
               <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-white/5 border border-white/10 rounded-md text-muted-foreground">Live Data</span>
             </div>
             <div className="space-y-6">
-              {data.devices.map((device) => {
-                const percentage = Math.round((device.value / data.totalViews) * 100) || 0;
+              {data?.devices?.map((device) => {
+                const percentage = Math.round((device.value / (data?.totalViews || 1)) * 100) || 0;
                 return (
                   <div key={device.name} className="group">
                     <div className="flex items-center justify-between mb-2">
@@ -143,7 +143,7 @@ export default function DashboardHome() {
                   </div>
                 );
               })}
-              {data.devices.length === 0 && (
+              {(!data?.devices || data?.devices?.length === 0) && (
                 <div className="text-center py-10 border border-dashed border-white/10 rounded-2xl">
                   <p className="text-muted-foreground text-sm">No device traffic recorded yet.</p>
                 </div>
