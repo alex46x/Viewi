@@ -18,10 +18,29 @@ export async function POST(req) {
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      // Create a default profile if new user
+      // If no username provided, tell frontend this is a new user
+      if (!username) {
+        return NextResponse.json({ 
+          newUser: true, 
+          email,
+          message: 'Please choose a username' 
+        });
+      }
+
+      // Check if username is already taken by someone else
+      const usernameCheck = await adminDb.collection('users')
+        .where('username', '==', username.toLowerCase())
+        .limit(1)
+        .get();
+
+      if (!usernameCheck.empty) {
+        return NextResponse.json({ error: 'Username already taken. Please try another.' }, { status: 400 });
+      }
+
+      // Create profile for new user
       await userRef.set({
         email,
-        username: username || email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, ''),
+        username: username.toLowerCase().replace(/[^a-z0-9_.]/g, ''),
         name: name || '',
         image: picture || '',
         bio: '',
