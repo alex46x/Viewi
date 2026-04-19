@@ -275,50 +275,106 @@ export default function ProfilePage() {
                   <Calendar className="w-3 h-3 text-primary" /> Date of Birth
                 </label>
                 <div className="grid grid-cols-3 gap-3">
-                  {/* Day Select */}
+                  {/* Day Custom Select */}
                   <div className="relative group/date">
-                    <select
-                      className="input-field-premium appearance-none pr-8 cursor-pointer"
-                      value={user?.dob ? new Date(user.dob).getDate() : ''}
-                      onChange={(e) => handleDateChange('day', e.target.value)}
+                    <button
+                      type="button"
+                      onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'day' ? null : 'day')}
+                      className={cn(
+                        "input-field-premium flex items-center justify-between text-left",
+                        activeDropdownIdx === 'day' && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
+                      )}
                     >
-                      <option value="" disabled>Day</option>
-                      {[...Array(31)].map((_, i) => (
-                        <option key={i+1} value={i+1}>{i+1}</option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-hover/date:text-primary transition-colors pointer-events-none" />
+                      <span className={user?.dob ? "text-white" : "text-white/20"}>
+                        {user?.dob ? new Date(user.dob).getDate() : 'Day'}
+                      </span>
+                      <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'day' && "rotate-180 text-primary")} />
+                    </button>
+                    {activeDropdownIdx === 'day' && (
+                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                        <div className="grid grid-cols-4 gap-1 max-h-[180px] overflow-y-auto custom-scrollbar p-1">
+                          {[...Array(31)].map((_, i) => (
+                            <button
+                              key={i+1}
+                              type="button"
+                              onClick={() => { handleDateChange('day', i+1); setActiveDropdownIdx(null); }}
+                              className="w-full aspect-square flex items-center justify-center rounded-lg text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
+                            >
+                              {i+1}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Month Select */}
+                  {/* Month Custom Select */}
                   <div className="relative group/date">
-                    <select
-                      className="input-field-premium appearance-none pr-8 cursor-pointer"
-                      value={user?.dob ? new Date(user.dob).getMonth() : ''}
-                      onChange={(e) => handleDateChange('month', e.target.value)}
+                    <button
+                      type="button"
+                      onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'month' ? null : 'month')}
+                      className={cn(
+                        "input-field-premium flex items-center justify-between text-left",
+                        activeDropdownIdx === 'month' && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
+                      )}
                     >
-                      <option value="" disabled>Month</option>
-                      {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, i) => (
-                        <option key={i} value={i}>{m}</option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-hover/date:text-primary transition-colors pointer-events-none" />
+                      <span className={user?.dob ? "text-white" : "text-white/20"}>
+                        {user?.dob ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][new Date(user.dob).getMonth()] : 'Month'}
+                      </span>
+                      <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'month' && "rotate-180 text-primary")} />
+                    </button>
+                    {activeDropdownIdx === 'month' && (
+                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                        <div className="grid grid-cols-1 gap-1 max-h-[220px] overflow-y-auto custom-scrollbar p-1">
+                          {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => { handleDateChange('month', i); setActiveDropdownIdx(null); }}
+                              className="w-full px-4 py-2 text-left rounded-xl text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
+                            >
+                              {m}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Year Select */}
+                  {/* Year Custom Select */}
                   <div className="relative group/date">
-                    <select
-                      className="input-field-premium appearance-none pr-8 cursor-pointer"
-                      value={user?.dob ? new Date(user.dob).getFullYear() : ''}
-                      onChange={(e) => handleDateChange('year', e.target.value)}
+                    <button
+                      type="button"
+                      onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'year' ? null : 'year')}
+                      className={cn(
+                        "input-field-premium flex items-center justify-between text-left",
+                        activeDropdownIdx === 'year' && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
+                      )}
                     >
-                      <option value="" disabled>Year</option>
-                      {[...Array(100)].map((_, i) => {
-                        const year = new Date().getFullYear() - i;
-                        return <option key={year} value={year}>{year}</option>
-                      })}
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-hover/date:text-primary transition-colors pointer-events-none" />
+                      <span className={user?.dob ? "text-white" : "text-white/20"}>
+                        {user?.dob ? new Date(user.dob).getFullYear() : 'Year'}
+                      </span>
+                      <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'year' && "rotate-180 text-primary")} />
+                    </button>
+                    {activeDropdownIdx === 'year' && (
+                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                        <div className="grid grid-cols-1 gap-1 max-h-[200px] overflow-y-auto custom-scrollbar p-1">
+                          {[...Array(100)].map((_, i) => {
+                            const year = new Date().getFullYear() - i;
+                            return (
+                              <button
+                                key={year}
+                                type="button"
+                                onClick={() => { handleDateChange('year', year); setActiveDropdownIdx(null); }}
+                                className="w-full px-4 py-2 text-left rounded-xl text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
+                              >
+                                {year}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
