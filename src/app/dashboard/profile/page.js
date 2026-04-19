@@ -15,7 +15,9 @@ import {
   Instagram,
   Camera,
   Upload,
-  X
+  X,
+  Calendar,
+  ChevronDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ImageCropModal from '@/components/ImageCropModal';
@@ -150,6 +152,16 @@ export default function ProfilePage() {
       setShowCropModal(false);
     }
   };
+  
+  const handleDateChange = (type, value) => {
+    const currentDate = user?.dob ? new Date(user.dob) : new Date(1995, 0, 1);
+    const day = type === 'day' ? parseInt(value) : (currentDate.getDate() || 1);
+    const month = type === 'month' ? parseInt(value) : (currentDate.getMonth() || 0);
+    const year = type === 'year' ? parseInt(value) : (currentDate.getFullYear() || 1995);
+    
+    const newDate = new Date(year, month, day);
+    setUser({ ...user, dob: newDate.toISOString() });
+  };
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -252,13 +264,56 @@ export default function ProfilePage() {
               </div>
               
               <div className="space-y-2.5">
-                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest pl-1">Date of Birth</label>
-                <input
-                  type="date"
-                  className="input-field-premium"
-                  value={user?.dob ? new Date(user.dob).toISOString().split('T')[0] : ''}
-                  onChange={(e) => setUser({ ...user, dob: e.target.value })}
-                />
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest pl-1 flex items-center gap-2">
+                  <Calendar className="w-3 h-3 text-primary" /> Date of Birth
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {/* Day Select */}
+                  <div className="relative group/date">
+                    <select
+                      className="input-field-premium appearance-none pr-8 cursor-pointer"
+                      value={user?.dob ? new Date(user.dob).getDate() : ''}
+                      onChange={(e) => handleDateChange('day', e.target.value)}
+                    >
+                      <option value="" disabled>Day</option>
+                      {[...Array(31)].map((_, i) => (
+                        <option key={i+1} value={i+1}>{i+1}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-hover/date:text-primary transition-colors pointer-events-none" />
+                  </div>
+
+                  {/* Month Select */}
+                  <div className="relative group/date">
+                    <select
+                      className="input-field-premium appearance-none pr-8 cursor-pointer"
+                      value={user?.dob ? new Date(user.dob).getMonth() : ''}
+                      onChange={(e) => handleDateChange('month', e.target.value)}
+                    >
+                      <option value="" disabled>Month</option>
+                      {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, i) => (
+                        <option key={i} value={i}>{m}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-hover/date:text-primary transition-colors pointer-events-none" />
+                  </div>
+
+                  {/* Year Select */}
+                  <div className="relative group/date">
+                    <select
+                      className="input-field-premium appearance-none pr-8 cursor-pointer"
+                      value={user?.dob ? new Date(user.dob).getFullYear() : ''}
+                      onChange={(e) => handleDateChange('year', e.target.value)}
+                    >
+                      <option value="" disabled>Year</option>
+                      {[...Array(100)].map((_, i) => {
+                        const year = new Date().getFullYear() - i;
+                        return <option key={year} value={year}>{year}</option>
+                      })}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-hover/date:text-primary transition-colors pointer-events-none" />
+                  </div>
+                </div>
               </div>
             </div>
 

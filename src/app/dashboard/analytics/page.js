@@ -54,7 +54,7 @@ export default function AnalyticsPage() {
         <div className="glass-card p-8 rounded-3xl flex items-center justify-between premium-glow overflow-hidden relative group">
           <div className="relative z-10">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Lifetime Views</p>
-            <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">{data.totalViews.toLocaleString()}</h3>
+            <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">{data?.totalViews?.toLocaleString() || '0'}</h3>
           </div>
           <div className="p-4 bg-primary/10 rounded-2xl group-hover:scale-110 transition-transform border border-primary/20 relative z-10">
             <Eye className="w-7 h-7 text-primary" />
@@ -65,7 +65,7 @@ export default function AnalyticsPage() {
         <div className="glass-card p-8 rounded-3xl flex items-center justify-between premium-glow overflow-hidden relative group">
           <div className="relative z-10">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Unique Users</p>
-            <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">{data.uniqueVisitors.toLocaleString()}</h3>
+            <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">{data?.uniqueVisitors?.toLocaleString() || '0'}</h3>
           </div>
           <div className="p-4 bg-accent/10 rounded-2xl group-hover:scale-110 transition-transform border border-accent/20 relative z-10">
             <Users className="w-7 h-7 text-accent" />
@@ -77,7 +77,7 @@ export default function AnalyticsPage() {
           <div className="relative z-10">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Engagement</p>
             <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">
-              {data.totalViews > 0 ? ((data.uniqueVisitors / data.totalViews) * 100).toFixed(1) : 0}%
+              {data?.totalViews > 0 ? ((data.uniqueVisitors / data.totalViews) * 100).toFixed(1) : 0}%
             </h3>
           </div>
           <div className="p-4 bg-primary/10 rounded-2xl group-hover:scale-110 transition-transform border border-primary/20 relative z-10">
@@ -102,7 +102,7 @@ export default function AnalyticsPage() {
         
         <div className="h-[350px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data.dailyVisits} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={data?.dailyVisits || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4}/>
@@ -173,8 +173,8 @@ export default function AnalyticsPage() {
           </div>
           
           <div className="space-y-6">
-            {data.countries.slice(0, 6).map((country, index) => {
-              const width = (country.value / data.totalViews) * 100;
+            {data?.countries?.slice(0, 6)?.map((country, index) => {
+              const width = (country.value / (data?.totalViews || 1)) * 100;
               return (
                 <div key={country.name} className="space-y-2 group">
                   <div className="flex items-center justify-between">
@@ -192,7 +192,7 @@ export default function AnalyticsPage() {
                 </div>
               );
             })}
-            {data.countries.length === 0 && (
+            {(!data?.countries || data?.countries?.length === 0) && (
               <div className="text-center py-20 border border-dashed border-white/10 rounded-3xl bg-white/[0.01]">
                 <p className="text-sm text-muted-foreground font-medium">Awaiting global traffic signals...</p>
               </div>
@@ -213,7 +213,7 @@ export default function AnalyticsPage() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data.devices}
+                  data={data?.devices || []}
                   cx="50%"
                   cy="50%"
                   innerRadius={85}
@@ -223,7 +223,7 @@ export default function AnalyticsPage() {
                   animationDuration={1500}
                   stroke="none"
                 >
-                  {data.devices.map((entry, index) => (
+                  {data?.devices?.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -242,12 +242,12 @@ export default function AnalyticsPage() {
             {/* Center Text for Pie */}
             <div className="absolute flex flex-col items-center">
               <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Total</p>
-              <p className="text-3xl font-black text-white">{data.totalViews}</p>
+              <p className="text-3xl font-black text-white">{data?.totalViews || 0}</p>
             </div>
           </div>
 
           <div className="mt-8 flex flex-wrap justify-center gap-6 pt-6 border-t border-white/[0.05]">
-            {data.devices.map((device, index) => (
+            {data?.devices?.map((device, index) => (
               <div key={device.name} className="flex items-center gap-2 group cursor-default">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
                 <span className="text-[10px] uppercase font-black tracking-widest text-muted-foreground group-hover:text-white transition-colors">{device.name}</span>
