@@ -162,16 +162,17 @@ export default function ProfilePage() {
   
   const handleDateChange = (type, value) => {
     setUser(prev => {
-      const currentDate = prev?.dob ? new Date(prev.dob) : new Date(1995, 0, 1);
-      let day = currentDate.getDate();
-      let month = currentDate.getMonth();
-      let year = currentDate.getFullYear();
+      // Use Date.UTC to avoid timezone shifts during selection
+      const currentDate = prev?.dob ? new Date(prev.dob) : new Date(Date.UTC(1995, 0, 1));
+      let day = currentDate.getUTCDate();
+      let month = currentDate.getUTCMonth();
+      let year = currentDate.getUTCFullYear();
 
       if (type === 'day') day = parseInt(value);
       if (type === 'month') month = parseInt(value);
       if (type === 'year') year = parseInt(value);
 
-      const newDate = new Date(year, month, day);
+      const newDate = new Date(Date.UTC(year, month, day));
       return { ...prev, dob: newDate.toISOString() };
     });
   };
@@ -292,7 +293,7 @@ export default function ProfilePage() {
                       )}
                     >
                       <span className={user?.dob ? "text-white" : "text-white/20"}>
-                        {user?.dob ? new Date(user.dob).getDate() : 'Day'}
+                        {user?.dob ? new Date(user.dob).getUTCDate() : 'Day'}
                       </span>
                       <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'day' && "rotate-180 text-primary")} />
                     </button>
@@ -325,7 +326,7 @@ export default function ProfilePage() {
                       )}
                     >
                       <span className={user?.dob ? "text-white" : "text-white/20"}>
-                        {user?.dob ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][new Date(user.dob).getMonth()] : 'Month'}
+                        {user?.dob ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][new Date(user.dob).getUTCMonth()] : 'Month'}
                       </span>
                       <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'month' && "rotate-180 text-primary")} />
                     </button>
@@ -358,7 +359,7 @@ export default function ProfilePage() {
                       )}
                     >
                       <span className={user?.dob ? "text-white" : "text-white/20"}>
-                        {user?.dob ? new Date(user.dob).getFullYear() : 'Year'}
+                        {user?.dob ? new Date(user.dob).getUTCFullYear() : 'Year'}
                       </span>
                       <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'year' && "rotate-180 text-primary")} />
                     </button>
