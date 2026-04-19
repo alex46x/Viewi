@@ -49,7 +49,7 @@ export default function ProfilePage() {
     
     // Click outside listener for dropdowns
     const handleClickOutside = (e) => {
-      if (!e.target.closest('.platform-dropdown-container')) {
+      if (!e.target.closest('.dropdown-container')) {
         setActiveDropdownIdx(null);
       }
     };
@@ -283,7 +283,7 @@ export default function ProfilePage() {
                 </label>
                 <div className="grid grid-cols-3 gap-3">
                   {/* Day Custom Select */}
-                  <div className="relative group/date">
+                  <div className="relative group/date dropdown-container">
                     <button
                       type="button"
                       onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'day' ? null : 'day')}
@@ -316,7 +316,7 @@ export default function ProfilePage() {
                   </div>
 
                   {/* Month Custom Select */}
-                  <div className="relative group/date">
+                  <div className="relative group/date dropdown-container">
                     <button
                       type="button"
                       onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'month' ? null : 'month')}
@@ -349,7 +349,7 @@ export default function ProfilePage() {
                   </div>
 
                   {/* Year Custom Select */}
-                  <div className="relative group/date">
+                  <div className="relative group/date dropdown-container">
                     <button
                       type="button"
                       onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'year' ? null : 'year')}
@@ -485,7 +485,7 @@ export default function ProfilePage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {/* Premium Custom Dropdown */}
-                      <div className="platform-dropdown-container relative">
+                      <div className="platform-dropdown-container dropdown-container relative">
                         <button
                           type="button"
                           onClick={() => setActiveDropdownIdx(activeDropdownIdx === index ? null : index)}
