@@ -13,7 +13,8 @@ import {
   MessageSquare,
   ExternalLink,
   Cake,
-  ArrowRight
+  ArrowRight,
+  Send
 } from 'lucide-react';
 import Link from 'next/link';
 import { UAParser } from 'ua-parser-js';
@@ -69,6 +70,7 @@ const SOCIAL_ICONS = {
   facebook: Facebook,
   tiktok: Music2,
   discord: MessageSquare,
+  telegram: Send,
 };
 
 async function trackVisit(userId, reqHeaders) {
@@ -78,16 +80,26 @@ async function trackVisit(userId, reqHeaders) {
     const uaString = reqHeaders.get('user-agent');
     const referrer = reqHeaders.get('referrer') || reqHeaders.get('referer') || 'Direct';
 
-    // 30s Debounce check
-    const thirtySecondsAgo = new Date(Date.now() - 30 * 1000);
+    console.log(`[Analytics] Tracking visit for ${userId} from ${ip}`);
+
+    // Debounce check: Get last visits from this IP
+    // Simplified query to avoid composite index requirement (profileId + ip + timestamp)
     const existingVisits = await adminDb.collection('analytics')
       .where('profileId', '==', userId)
       .where('ip', '==', ip)
-      .where('timestamp', '>=', thirtySecondsAgo.toISOString()) // Basic string compare if iso
-      .limit(1)
+      .limit(5) // Get last few to check in memory
       .get();
 
-    if (!existingVisits.empty) return;
+    const thirtySecondsAgo = new Date(Date.now() - 30 * 1000).toISOString();
+    const hasRecentVisit = existingVisits.docs.some(doc => {
+      const data = doc.data();
+      return data.timestamp >= thirtySecondsAgo;
+    });
+
+    if (hasRecentVisit) {
+      console.log(`[Analytics] Debouncing visit from ${ip} (last 30s)`);
+      return;
+    }
 
     const parser = new UAParser(uaString);
     const browser = parser.getBrowser().name || 'Unknown';
@@ -96,7 +108,7 @@ async function trackVisit(userId, reqHeaders) {
     // GeoIP - Use Vercel headers if available
     const country = reqHeaders.get('x-vercel-ip-country') || 'Unknown';
 
-    await adminDb.collection('analytics').add({
+    const analyticsData = {
       profileId: userId,
       country,
       deviceType,
@@ -104,9 +116,12 @@ async function trackVisit(userId, reqHeaders) {
       referrer,
       ip,
       timestamp: new Date().toISOString()
-    });
+    };
+
+    await adminDb.collection('analytics').add(analyticsData);
+    console.log('[Analytics] Visit recorded successfully');
   } catch (error) {
-    console.error('Analytics tracking error:', error);
+    console.error('[Analytics] Tracking error:', error);
   }
 }
 

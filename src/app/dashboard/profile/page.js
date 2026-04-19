@@ -17,7 +17,8 @@ import {
   Upload,
   X,
   Calendar,
-  ChevronDown
+  ChevronDown,
+  Send
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ImageCropModal from '@/components/ImageCropModal';
@@ -29,6 +30,7 @@ const SOCIAL_ICONS = {
   github: Github,
   instagram: Instagram,
   website: Globe,
+  telegram: Send,
   default: LinkIcon
 };
 
@@ -456,6 +458,7 @@ export default function ProfilePage() {
                 { id: 'tiktok', name: 'TikTok', placeholder: 'https://tiktok.com/@username' },
                 { id: 'facebook', name: 'Facebook', placeholder: 'https://facebook.com/username' },
                 { id: 'discord', name: 'Discord Server', placeholder: 'https://discord.gg/invite' },
+                { id: 'telegram', name: 'Telegram', placeholder: 'https://t.me/username' },
               ];
               
               const currentPlatform = platforms.find(p => p.id === link.platform) || platforms[0];

@@ -11,12 +11,28 @@ export async function GET(req) {
     if (!decoded) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
 
     // Get all analytics for this profile from Firestore
-    const snapshot = await adminDb.collection('analytics')
-      .where('profileId', '==', decoded.userId)
-      .orderBy('timestamp', 'desc')
-      .get();
+    // Removed .orderBy('timestamp', 'desc') to avoid composite index requirement
+    console.log(`[Analytics API] Fetching data for userId: ${decoded.userId}`);
+    
+    let snapshot;
+    try {
+      snapshot = await adminDb.collection('analytics')
+        .where('profileId', '==', decoded.userId)
+        .get();
+    } catch (dbError) {
+      console.error('[Analytics API] Database query failed:', dbError);
+      throw dbError;
+    }
 
-    const analytics = snapshot.docs.map(doc => doc.data());
+    console.log(`[Analytics API] Found ${snapshot.size} records`);
+
+    // Map and sort in memory
+    const analytics = snapshot.docs.map(doc => doc.data())
+      .sort((a, b) => {
+        const dateA = new Date(a.timestamp);
+        const dateB = new Date(b.timestamp);
+        return dateB - dateA;
+      });
 
     // Aggregations
     const totalViews = analytics.length;
@@ -24,16 +40,24 @@ export async function GET(req) {
 
     // Daily visits (last 7 days)
     const dailyVisits = [];
+    const today = new Date();
+    
     for (let i = 6; i >= 0; i--) {
-      const date = new Date();
+      const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
       
       const count = analytics.filter(a => {
         const ts = a.timestamp;
+        if (!ts) return false;
+        
         // Firestore timestamps might be strings or Date objects depending on how they were saved
-        const dateObj = typeof ts === 'string' ? new Date(ts) : ts.toDate();
-        return dateObj.toISOString().split('T')[0] === dateStr;
+        try {
+          const dateObj = typeof ts === 'string' ? new Date(ts) : ts.toDate();
+          return dateObj.toISOString().split('T')[0] === dateStr;
+        } catch (e) {
+          return false;
+        }
       }).length;
       
       dailyVisits.push({ date: dateStr, count });
