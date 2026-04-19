@@ -161,13 +161,19 @@ export default function ProfilePage() {
   };
   
   const handleDateChange = (type, value) => {
-    const currentDate = user?.dob ? new Date(user.dob) : new Date(1995, 0, 1);
-    const day = type === 'day' ? parseInt(value) : (currentDate.getDate() || 1);
-    const month = type === 'month' ? parseInt(value) : (currentDate.getMonth() || 0);
-    const year = type === 'year' ? parseInt(value) : (currentDate.getFullYear() || 1995);
-    
-    const newDate = new Date(year, month, day);
-    setUser({ ...user, dob: newDate.toISOString() });
+    setUser(prev => {
+      const currentDate = prev?.dob ? new Date(prev.dob) : new Date(1995, 0, 1);
+      let day = currentDate.getDate();
+      let month = currentDate.getMonth();
+      let year = currentDate.getFullYear();
+
+      if (type === 'day') day = parseInt(value);
+      if (type === 'month') month = parseInt(value);
+      if (type === 'year') year = parseInt(value);
+
+      const newDate = new Date(year, month, day);
+      return { ...prev, dob: newDate.toISOString() };
+    });
   };
 
   if (loading) return (
@@ -291,14 +297,14 @@ export default function ProfilePage() {
                       <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'day' && "rotate-180 text-primary")} />
                     </button>
                     {activeDropdownIdx === 'day' && (
-                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-                        <div className="grid grid-cols-4 gap-1 max-h-[180px] overflow-y-auto custom-scrollbar p-1">
+                      <div className="absolute top-full left-0 mt-2 p-2 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[200px]">
+                        <div className="grid grid-cols-7 gap-1 max-h-[180px] overflow-y-auto custom-scrollbar p-1">
                           {[...Array(31)].map((_, i) => (
                             <button
                               key={i+1}
                               type="button"
                               onClick={() => { handleDateChange('day', i+1); setActiveDropdownIdx(null); }}
-                              className="w-full aspect-square flex items-center justify-center rounded-lg text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
+                              className="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
                             >
                               {i+1}
                             </button>
@@ -324,14 +330,14 @@ export default function ProfilePage() {
                       <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'month' && "rotate-180 text-primary")} />
                     </button>
                     {activeDropdownIdx === 'month' && (
-                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[120px]">
                         <div className="grid grid-cols-1 gap-1 max-h-[220px] overflow-y-auto custom-scrollbar p-1">
                           {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, i) => (
                             <button
                               key={i}
                               type="button"
                               onClick={() => { handleDateChange('month', i); setActiveDropdownIdx(null); }}
-                              className="w-full px-4 py-2 text-left rounded-xl text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
+                              className="w-full px-4 py-2.5 text-left rounded-xl text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
                             >
                               {m}
                             </button>
@@ -357,7 +363,7 @@ export default function ProfilePage() {
                       <ChevronDown className={cn("w-4 h-4 text-white/20 transition-transform duration-300", activeDropdownIdx === 'year' && "rotate-180 text-primary")} />
                     </button>
                     {activeDropdownIdx === 'year' && (
-                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                      <div className="absolute top-full left-0 right-0 mt-2 p-1 glass-liquid rounded-2xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[100px]">
                         <div className="grid grid-cols-1 gap-1 max-h-[200px] overflow-y-auto custom-scrollbar p-1">
                           {[...Array(100)].map((_, i) => {
                             const year = new Date().getFullYear() - i;
@@ -440,15 +446,15 @@ export default function ProfilePage() {
           <div className="space-y-5">
             {user?.socialLinks?.map((link, index) => {
               const platforms = [
-                { id: 'website', name: 'Personal Website' },
-                { id: 'linkedin', name: 'LinkedIn' },
-                { id: 'youtube', name: 'YouTube Channel' },
-                { id: 'twitter', name: 'X (Twitter)' },
-                { id: 'github', name: 'GitHub Profile' },
-                { id: 'instagram', name: 'Instagram' },
-                { id: 'tiktok', name: 'TikTok' },
-                { id: 'facebook', name: 'Facebook' },
-                { id: 'discord', name: 'Discord Server' },
+                { id: 'website', name: 'Personal Website', placeholder: 'https://yourwebsite.com' },
+                { id: 'linkedin', name: 'LinkedIn', placeholder: 'https://linkedin.com/in/username' },
+                { id: 'youtube', name: 'YouTube Channel', placeholder: 'https://youtube.com/@username' },
+                { id: 'twitter', name: 'X (Twitter)', placeholder: 'https://x.com/username' },
+                { id: 'github', name: 'GitHub Profile', placeholder: 'https://github.com/username' },
+                { id: 'instagram', name: 'Instagram', placeholder: 'https://instagram.com/username' },
+                { id: 'tiktok', name: 'TikTok', placeholder: 'https://tiktok.com/@username' },
+                { id: 'facebook', name: 'Facebook', placeholder: 'https://facebook.com/username' },
+                { id: 'discord', name: 'Discord Server', placeholder: 'https://discord.gg/invite' },
               ];
               
               const currentPlatform = platforms.find(p => p.id === link.platform) || platforms[0];
@@ -533,7 +539,7 @@ export default function ProfilePage() {
                         <input
                           type="url"
                           className="w-full h-14 pl-6 pr-12 rounded-2xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 hover:bg-white/[0.08] transition-all font-medium tracking-tight"
-                          placeholder="https://yourprofile.com/handle"
+                          placeholder={currentPlatform.placeholder}
                           value={link.url}
                           onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
                         />
