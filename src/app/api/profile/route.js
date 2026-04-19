@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebaseAdmin';
 import { verifyToken } from '@/lib/auth';
+import { normalizeSocialLink } from '@/lib/utils';
 
 export async function GET(req) {
   try {
@@ -42,7 +43,16 @@ export async function PATCH(req) {
     const updateData = {};
     
     allowedUpdates.forEach(key => {
-      if (body[key] !== undefined) updateData[key] = body[key];
+      if (body[key] !== undefined) {
+        if (key === 'socialLinks' && Array.isArray(body[key])) {
+          updateData[key] = body[key].map(link => ({
+            ...link,
+            url: normalizeSocialLink(link.platform, link.url)
+          }));
+        } else {
+          updateData[key] = body[key];
+        }
+      }
     });
 
     await userRef.update(updateData);

@@ -20,7 +20,7 @@ import {
   ChevronDown,
   Send
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, normalizeSocialLink } from '@/lib/utils';
 import ImageCropModal from '@/components/ImageCropModal';
 
 const SOCIAL_ICONS = {
@@ -547,6 +547,7 @@ export default function ProfilePage() {
                           placeholder={currentPlatform.placeholder}
                           value={link.url}
                           onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
+                          onBlur={(e) => updateSocialLink(index, 'url', normalizeSocialLink(link.platform, e.target.value))}
                         />
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-20 group-hover/input:opacity-50 transition-opacity">
                           <Globe className="w-4 h-4" />
