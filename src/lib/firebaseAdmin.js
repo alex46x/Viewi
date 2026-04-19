@@ -4,7 +4,6 @@ import path from 'path';
 
 if (!admin.apps.length) {
   try {
-    // Check if we have environment variables (Vercel / Production)
     if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
       admin.initializeApp({
         credential: admin.credential.cert({
@@ -14,7 +13,6 @@ if (!admin.apps.length) {
         }),
       });
     } 
-    // Only attempt to load serviceAccountKey.json in development environment
     else if (process.env.NODE_ENV === 'development') {
       try {
         const jsonPath = path.join(process.cwd(), 'serviceAccountKey.json');
@@ -25,7 +23,7 @@ if (!admin.apps.length) {
           });
         }
       } catch (e) {
-        console.warn('Firebase Admin: serviceAccountKey.json not found or invalid.');
+        console.warn('Firebase Admin: serviceAccountKey.json not found in development.');
       }
     }
   } catch (error) {
@@ -33,7 +31,8 @@ if (!admin.apps.length) {
   }
 }
 
-const adminDb = admin.firestore();
-const adminAuth = admin.auth();
+// Only export services if app is initialized
+const adminDb = admin.apps.length ? admin.firestore() : null;
+const adminAuth = admin.apps.length ? admin.auth() : null;
 
 export { adminDb, adminAuth };
