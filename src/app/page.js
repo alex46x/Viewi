@@ -34,11 +34,11 @@ export default function Home() {
             and track every visit with deep, real-time analytics.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/signup" className="btn-primary w-full sm:w-auto h-12 px-8 text-lg">
-              Create Your Viewi <ArrowRight className="ml-2 w-5 h-5" />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
+            <Link href="/signup" className="btn-premium w-full sm:w-auto h-12 px-8 text-sm font-bold flex items-center justify-center gap-2">
+              Create Your Viewi <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/login" className="w-full sm:w-auto h-12 px-8 text-lg inline-flex items-center justify-center rounded-md border border-border hover:bg-accent transition-colors">
+            <Link href="/login" className="w-full sm:w-auto h-12 px-8 text-sm font-bold inline-flex items-center justify-center rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/20 transition-all text-white select-none active:scale-[0.98]">
               Sign In
             </Link>
           </div>
@@ -79,32 +79,32 @@ export default function Home() {
       {/* Features Grid */}
       <section className="py-20 px-6 max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="p-8 glass-card rounded-2xl space-y-4 hover:border-blue-500/50 transition-colors">
+          <div className="p-6 sm:p-8 glass-card rounded-[2rem] space-y-4 hover:border-violet-500/30 transition-colors">
             <div className="p-3 bg-violet-500/10 rounded-xl w-fit">
               <Share2 className="text-violet-500" />
             </div>
-            <h3 className="text-xl font-bold">One Link for All</h3>
-            <p className="text-muted-foreground leading-relaxed">
+            <h3 className="text-xl font-bold text-white">One Link for All</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed font-medium">
               Consolidate your social media, portfolio, and website into one stunning landing page.
             </p>
           </div>
           
-          <div className="p-8 glass-card rounded-2xl space-y-4 hover:border-indigo-500/50 transition-colors">
+          <div className="p-6 sm:p-8 glass-card rounded-[2rem] space-y-4 hover:border-fuchsia-500/30 transition-colors">
             <div className="p-3 bg-fuchsia-500/10 rounded-xl w-fit">
               <BarChart3 className="text-fuchsia-500" />
             </div>
-            <h3 className="text-xl font-bold">Deep Analytics</h3>
-            <p className="text-muted-foreground leading-relaxed">
+            <h3 className="text-xl font-bold text-white">Deep Analytics</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed font-medium">
               Understand your audience with real-time data on devices, locations, and referrers.
             </p>
           </div>
           
-          <div className="p-8 glass-card rounded-2xl space-y-4 hover:border-blue-500/50 transition-colors">
+          <div className="p-6 sm:p-8 glass-card rounded-[2rem] space-y-4 hover:border-violet-500/30 transition-colors">
             <div className="p-3 bg-violet-500/10 rounded-xl w-fit">
               <QrCode className="text-violet-500" />
             </div>
-            <h3 className="text-xl font-bold">Smart QR Codes</h3>
-            <p className="text-muted-foreground leading-relaxed">
+            <h3 className="text-xl font-bold text-white">Smart QR Codes</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed font-medium">
               Every profile gets a unique QR code. Print it, share it, and watch the visits grow.
             </p>
           </div>

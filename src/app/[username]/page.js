@@ -187,7 +187,7 @@ export default async function ProfilePage({ params }) {
 
         {/* Social Links List */}
         <div className="w-full space-y-4">
-          {user.socialLinks.map((link, index) => {
+          {(user.socialLinks || []).map((link, index) => {
             const Icon = SOCIAL_ICONS[link.platform] || SOCIAL_ICONS.website;
             return (
               <a
@@ -208,8 +208,8 @@ export default async function ProfilePage({ params }) {
             );
           })}
           
-          {user.socialLinks.length === 0 && (
-            <p className="text-center text-muted-foreground">No links added yet.</p>
+          {(user.socialLinks || []).length === 0 && (
+            <p className="text-center text-muted-foreground text-sm font-medium">No links added yet.</p>
           )}
         </div>
 

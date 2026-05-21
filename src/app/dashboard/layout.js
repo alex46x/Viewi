@@ -58,14 +58,14 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Sidebar - Desktop */}
-      <aside className="w-72 border-r border-white-[0.05] bg-black/40 backdrop-blur-2xl hidden md:flex flex-col fixed h-full z-40">
+      <aside className="w-72 border-r border-white/5 bg-black/40 backdrop-blur-2xl hidden md:flex flex-col fixed h-full z-40">
         <div className="p-8">
           <Logo />
         </div>
         
         {/* User Card in Sidebar */}
         <div className="px-6 mb-8">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white-[0.05] flex items-center gap-3">
+          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-3">
              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
                 {user?.image ? (
                   <img src={user.image} alt="User" className="w-full h-full object-cover" />
@@ -123,7 +123,7 @@ export default function DashboardLayout({ children }) {
           </Link>
         </div>
 
-        <div className="mt-auto pt-6 border-t border-white-[0.05]">
+        <div className="mt-auto pt-6 border-t border-white/5">
           <LogoutButton onLogout={handleLogout} />
         </div>
       </aside>

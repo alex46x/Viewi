@@ -51,7 +51,7 @@ export default function AnalyticsPage() {
     <div className="space-y-10 animate-entrance">
       {/* Stats Cards Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card p-8 rounded-3xl flex items-center justify-between premium-glow overflow-hidden relative group">
+        <div className="glass-card p-6 sm:p-8 rounded-[2rem] flex items-center justify-between premium-glow overflow-hidden relative group">
           <div className="relative z-10">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Lifetime Views</p>
             <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">{data?.totalViews?.toLocaleString() || '0'}</h3>
@@ -62,7 +62,7 @@ export default function AnalyticsPage() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
         </div>
         
-        <div className="glass-card p-8 rounded-3xl flex items-center justify-between premium-glow overflow-hidden relative group">
+        <div className="glass-card p-6 sm:p-8 rounded-[2rem] flex items-center justify-between premium-glow overflow-hidden relative group">
           <div className="relative z-10">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Unique Users</p>
             <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">{data?.uniqueVisitors?.toLocaleString() || '0'}</h3>
@@ -73,7 +73,7 @@ export default function AnalyticsPage() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
         </div>
 
-        <div className="glass-card p-8 rounded-3xl flex items-center justify-between premium-glow overflow-hidden relative group">
+        <div className="glass-card p-6 sm:p-8 rounded-[2rem] flex items-center justify-between premium-glow overflow-hidden relative group">
           <div className="relative z-10">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Engagement</p>
             <h3 className="text-4xl font-black text-white tabular-nums drop-shadow-sm">
@@ -88,7 +88,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Main Trends Chart */}
-      <div className="glass-card p-10 rounded-[2.5rem] border-white/5 shadow-2xl shadow-black/20">
+      <div className="glass-card p-6 sm:p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border-white/5 shadow-2xl shadow-black/20">
         <div className="flex items-center justify-between mb-10">
           <div>
             <h3 className="text-2xl font-black text-white tracking-tight">Visitor Trends</h3>
@@ -161,7 +161,7 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Geographic Breakdown */}
-        <div className="glass-card p-10 rounded-[2.5rem] border-white/5">
+        <div className="glass-card p-6 sm:p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border-white/5">
           <div className="flex items-center justify-between mb-10">
             <div>
               <h3 className="text-xl font-black text-white tracking-tight">Geographic Reach</h3>
@@ -201,7 +201,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Device Ecosystem */}
-        <div className="glass-card p-10 rounded-[2.5rem] border-white/5">
+        <div className="glass-card p-6 sm:p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border-white/5">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-black text-white tracking-tight">System Ecosystem</h3>

@@ -32,7 +32,7 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-4xl space-y-8 animate-in fade-in duration-500">
-      <div className="glass-card p-8 rounded-2xl space-y-6">
+      <div className="glass-card p-6 sm:p-8 rounded-[2rem] space-y-6">
         <h2 className="text-xl font-bold flex items-center gap-2">
           <Shield className="w-5 h-5 text-blue-500" />
           Security & Privacy
@@ -55,7 +55,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="glass-card p-8 rounded-2xl space-y-6">
+      <div className="glass-card p-6 sm:p-8 rounded-[2rem] space-y-6">
         <h2 className="text-xl font-bold flex items-center gap-2">
           <Bell className="w-5 h-5 text-indigo-500" />
           Notifications
@@ -74,7 +74,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="glass-card p-8 rounded-2xl border-red-500/20 bg-red-500/5 space-y-6">
+      <div className="glass-card p-6 sm:p-8 rounded-[2rem] border-red-500/20 bg-red-500/5 space-y-6">
         <h2 className="text-xl font-bold text-red-500 flex items-center gap-2">
           <Trash2 className="w-5 h-5" />
           Danger Zone

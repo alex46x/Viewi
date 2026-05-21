@@ -13,7 +13,7 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-6 text-sm font-medium">
         <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">Login</Link>
-        <Link href="/signup" className="btn-primary px-6">Get Started</Link>
+        <Link href="/signup" className="btn-premium h-9 px-4 text-xs font-semibold">Get Started</Link>
       </div>
     </nav>
   );

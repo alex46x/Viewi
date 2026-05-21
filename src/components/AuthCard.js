@@ -10,7 +10,9 @@ import {
   ArrowRight, 
   Loader2, 
   X,
-  Github
+  Github,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -24,6 +26,7 @@ export default function AuthCard({ initialMode = 'signup' }) {
     username: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [authStep, setAuthStep] = useState('initial'); // 'initial', 'username-select'
   const [tempIdToken, setTempIdToken] = useState(null);
   const [chosenUsername, setChosenUsername] = useState('');
@@ -162,7 +165,7 @@ export default function AuthCard({ initialMode = 'signup' }) {
         {/* Close Button - Redirects to Homepage */}
         <Link 
           href="/"
-          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 transition-all text-white/40 hover:text-white hover:scale-110 active:scale-95 z-20"
+          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all text-white/40 hover:text-white hover:scale-110 active:scale-95 z-20 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </Link>
@@ -189,12 +192,12 @@ export default function AuthCard({ initialMode = 'signup' }) {
               )}
 
               <div className="relative group">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-violet-500 transition-colors" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
                 <input
                   type="text"
                   required
                   autoFocus
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:bg-white/10 transition-all"
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
                   placeholder="Username"
                   value={chosenUsername}
                   onChange={(e) => setChosenUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, ''))}
@@ -204,7 +207,7 @@ export default function AuthCard({ initialMode = 'signup' }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 mt-6 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-extrabold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-xl shadow-violet-500/20"
+                className="w-full py-4 mt-6 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-extrabold rounded-2xl hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-white/10 relative overflow-hidden group/btn cursor-pointer"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Complete Setup'}
               </button>
@@ -268,11 +271,11 @@ export default function AuthCard({ initialMode = 'signup' }) {
 
               {mode === 'signup' && (
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-blue-500 transition-colors" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
                     required
-                    className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white/10 transition-all"
+                    className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
                     placeholder="Username"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -281,11 +284,11 @@ export default function AuthCard({ initialMode = 'signup' }) {
               )}
 
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-blue-500 transition-colors" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
                 <input
                   type="email"
                   required
-                  className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white/10 transition-all"
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -293,21 +296,28 @@ export default function AuthCard({ initialMode = 'signup' }) {
               </div>
 
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-blue-500 transition-colors" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
-                  className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white/10 transition-all"
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-12 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
                   placeholder="Password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-white/40 hover:text-white hover:scale-110 active:scale-95 transition-all cursor-pointer z-10"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-extrabold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-xl shadow-violet-500/20"
+                className="w-full py-4 mt-6 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-extrabold rounded-2xl hover:opacity-90 hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-xl shadow-violet-500/20 border border-white/10 relative overflow-hidden group/btn cursor-pointer"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -331,7 +341,7 @@ export default function AuthCard({ initialMode = 'signup' }) {
                 type="button" 
                 onClick={handleGoogleLogin} 
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 py-4 bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl transition-all group active:scale-95 disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-3 py-4 bg-white/[0.02] hover:bg-white/10 border border-white/10 hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] rounded-2xl transition-all group active:scale-[0.98] disabled:opacity-50 cursor-pointer"
               >
                 <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                   <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />

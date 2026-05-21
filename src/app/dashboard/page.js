@@ -41,7 +41,7 @@ export default function DashboardHome() {
   return (
     <div className="space-y-10">
       {/* Welcome Card */}
-      <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden mesh-gradient border-white/10 group">
+      <div className="glass-card p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] relative overflow-hidden mesh-gradient border-white/10 group">
         <div className="relative z-10 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-6 group-hover:bg-primary/20 transition-colors">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -80,7 +80,7 @@ export default function DashboardHome() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Quick Stats */}
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="glass-card p-8 rounded-3xl flex flex-col justify-between group premium-glow">
+          <div className="glass-card p-6 sm:p-8 rounded-[2rem] flex flex-col justify-between group premium-glow">
             <div className="flex justify-between items-start mb-10">
               <div className="p-4 bg-primary/10 rounded-2xl group-hover:bg-primary/20 transition-all group-hover:scale-110 border border-primary/20">
                 <Eye className="w-7 h-7 text-primary" />
@@ -95,7 +95,7 @@ export default function DashboardHome() {
             </div>
           </div>
 
-          <div className="glass-card p-8 rounded-3xl flex flex-col justify-between group premium-glow">
+          <div className="glass-card p-6 sm:p-8 rounded-[2rem] flex flex-col justify-between group premium-glow">
             <div className="flex justify-between items-start mb-10">
               <div className="p-4 bg-accent/10 rounded-2xl group-hover:bg-accent/20 transition-all group-hover:scale-110 border border-accent/20">
                 <Users className="w-7 h-7 text-accent" />
@@ -111,7 +111,7 @@ export default function DashboardHome() {
           </div>
 
           {/* Device Breakdown List */}
-          <div className="md:col-span-2 glass-card p-8 rounded-3xl">
+          <div className="md:col-span-2 glass-card p-6 sm:p-8 rounded-[2rem]">
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-xl font-bold tracking-tight">Access by Device</h3>
               <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-white/5 border border-white/10 rounded-md text-muted-foreground">Live Data</span>
@@ -154,7 +154,7 @@ export default function DashboardHome() {
 
         {/* Share Card */}
         <div className="lg:col-span-1">
-          <div className="glass-card p-8 rounded-[2.5rem] sticky top-28 border-primary/20 shadow-2xl shadow-primary/5 group">
+          <div className="glass-card p-6 sm:p-8 rounded-[2rem] md:rounded-[2.5rem] sticky top-28 border-primary/20 shadow-2xl shadow-primary/5 group">
             <div className="flex items-center gap-3 mb-8">
               <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20 group-hover:scale-110 transition-transform">
                 <Share2 className="w-5 h-5 text-primary" />
@@ -163,7 +163,7 @@ export default function DashboardHome() {
             </div>
             
             <div className="relative group-hover:scale-[1.02] transition-transform duration-500">
-              <QRCodeDisplay url={profileUrl} />
+              <QRCodeDisplay url={profileUrl} avatarUrl={user?.image} />
             </div>
             
             <p className="mt-8 text-xs text-center text-muted-foreground leading-relaxed">

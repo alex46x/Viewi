@@ -127,9 +127,29 @@
 
 /* Premium Buttons */
 .btn-premium {
-  @apply relative overflow-hidden inline-flex items-center justify-center rounded-xl text-sm font-bold transition-all duration-300 
-         bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-[0_0_20px_rgba(139,92,246,0.4)]
-         active:scale-[0.98] py-3 px-6 gap-2 border border-white/10;
+  @apply relative overflow-hidden inline-flex items-center justify-center rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 
+         bg-gradient-to-r from-violet-600 via-indigo-600 to-accent text-white
+         shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_4px_12px_rgba(124,58,237,0.35)]
+         active:scale-[0.97] py-3 px-6 gap-2 border border-white/20 select-none cursor-pointer;
+  background-size: 200% auto;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-premium:hover {
+  background-position: right center;
+  transform: translateY(-1.5px);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 12px 28px -4px rgba(124, 58, 237, 0.5),
+    0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+.btn-premium:active {
+  transform: translateY(0.5px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(124, 58, 237, 0.2);
 }
 
 .btn-premium::before {
@@ -142,7 +162,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.25),
     transparent
   );
   transition: 0.5s;
