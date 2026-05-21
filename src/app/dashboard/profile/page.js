@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
   Plus, 
   Trash2, 
@@ -47,6 +47,31 @@ export default function ProfilePage() {
   const [uploading, setUploading] = useState(false);
   const [activeDropdownIdx, setActiveDropdownIdx] = useState(null);
   const [linkToDelete, setLinkToDelete] = useState(null);
+
+  // States for custom SET BIRTHDAY modal
+  const [showBirthdayModal, setShowBirthdayModal] = useState(false);
+  const [tempYear, setTempYear] = useState(1995);
+  const [tempMonth, setTempMonth] = useState('Jan');
+  const [tempDay, setTempDay] = useState(1);
+
+  const monthsArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const yearsArray = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+
+  // Calculate days in the selected month & year dynamically
+  const getDaysInMonth = (monthName, year) => {
+    const monthIdx = monthsArray.indexOf(monthName);
+    return new Date(year, monthIdx + 1, 0).getDate();
+  };
+
+  const currentMaxDays = getDaysInMonth(tempMonth, tempYear);
+  const daysArray = Array.from({ length: currentMaxDays }, (_, i) => i + 1);
+
+  // Auto-correct selected day if it exceeds the maximum days for the month
+  useEffect(() => {
+    if (tempDay > currentMaxDays) {
+      setTempDay(currentMaxDays);
+    }
+  }, [tempMonth, tempYear, currentMaxDays, tempDay]);
 
   useEffect(() => {
     fetchProfile();
@@ -182,6 +207,21 @@ export default function ProfilePage() {
     });
   };
 
+  const handleOpenBirthdayModal = () => {
+    const currentDate = user?.dob ? new Date(user.dob) : new Date(Date.UTC(1995, 0, 1));
+    setTempYear(currentDate.getUTCFullYear());
+    setTempMonth(monthsArray[currentDate.getUTCMonth()]);
+    setTempDay(currentDate.getUTCDate());
+    setShowBirthdayModal(true);
+  };
+
+  const handleSubmitBirthday = () => {
+    const monthIdx = monthsArray.indexOf(tempMonth);
+    const newDate = new Date(Date.UTC(tempYear, monthIdx, tempDay));
+    setUser({ ...user, dob: newDate.toISOString() });
+    setShowBirthdayModal(false);
+  };
+
   if (loading) return (
     <div className="flex items-center justify-center min-h-[400px]">
       <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -189,15 +229,19 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <form onSubmit={handleUpdate} className="space-y-10">
+    <div className="max-w-3xl mx-auto space-y-5">
+      <form onSubmit={handleUpdate} className="space-y-5">
+        
         {/* Sleek Profile Settings Grid */}
-        <div className="glass-card p-5 sm:p-6 rounded-[2rem] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent space-y-5">
-          {/* Row 1: Profile Avatar & Display Name */}
-          <div className="flex items-center gap-4 sm:gap-6">
+        <div className="glass-card p-4 sm:p-5 rounded-[2rem] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent space-y-4">
+          
+          {/* Section 1: Avatar, Name & Bio */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            
+            {/* Avatar Column */}
             <div 
               className={cn(
-                "relative group cursor-pointer transition-all duration-500 shrink-0",
+                "relative group cursor-pointer transition-all duration-500 shrink-0 mx-auto sm:mx-0",
                 isDragging && "scale-105"
               )}
               onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -206,7 +250,7 @@ export default function ProfilePage() {
               onClick={() => document.getElementById('photo-input').click()}
             >
               <div className={cn(
-                "w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/5 border border-dashed flex items-center justify-center overflow-hidden transition-all duration-500 relative",
+                "w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full bg-primary/5 border border-dashed flex items-center justify-center overflow-hidden transition-all duration-500 relative",
                 isDragging ? "border-primary bg-primary/10" : "border-white/10 group-hover:border-primary/50 group-hover:bg-primary/5"
               )}>
                 {uploading ? (
@@ -234,9 +278,6 @@ export default function ProfilePage() {
                 <Camera className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/80 group-hover:text-primary" />
               </div>
               
-              {/* Decorative ring */}
-              <div className="absolute -inset-1 border border-primary/20 rounded-full scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-700" />
-              
               <input 
                 id="photo-input"
                 type="file" 
@@ -246,189 +287,106 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="flex-1 space-y-1.5 min-w-0">
-              <label className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1">Display Name</label>
-              <input
-                type="text"
-                className="input-field-premium h-10 sm:h-11 text-xs sm:text-sm"
-                placeholder="Ex. John Doe"
-                value={user?.name || ''}
-                onChange={(e) => setUser({ ...user, name: e.target.value })}
-              />
+            {/* Name & Bio Stack */}
+            <div className="flex-1 w-full space-y-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1">Display Name</span>
+                  <input
+                    type="text"
+                    className="input-field-premium h-9 text-xs"
+                    placeholder="Ex. John Doe"
+                    value={user?.name || ''}
+                    onChange={(e) => setUser({ ...user, name: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1">Short Bio</span>
+                  <input
+                    type="text"
+                    className="input-field-premium h-9 text-xs"
+                    placeholder="Tell the world about yourself..."
+                    value={user?.bio || ''}
+                    onChange={(e) => setUser({ ...user, bio: e.target.value })}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Row 2: Date of Birth & Short Bio on Desktop */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Date of Birth Selects */}
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1 flex items-center gap-1.5">
+          {/* Divider */}
+          <div className="border-t border-white/[0.05]" />
+
+          {/* Section 2: Date of Birth & Visibility Switches */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            
+            {/* Birthday Selector Trigger */}
+            <div className="md:col-span-5 space-y-1">
+              <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1 flex items-center gap-1.5">
                 <Calendar className="w-3 h-3 text-primary" /> Date of Birth
+              </span>
+              <button
+                type="button"
+                onClick={handleOpenBirthdayModal}
+                className="w-full input-field-premium h-9 text-xs flex items-center justify-between text-left cursor-pointer text-white"
+              >
+                <span>
+                  {user?.dob 
+                    ? new Date(user.dob).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) 
+                    : 'Set Birthday'}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-white/30" />
+              </button>
+            </div>
+
+            {/* Visibility Toggles */}
+            <div className="md:col-span-7 flex flex-col sm:flex-row gap-4 sm:gap-6 md:justify-end pt-2 md:pt-4">
+              <label className="flex items-center gap-2.5 cursor-pointer group">
+                <div className="relative flex items-center">
+                  <input 
+                    type="checkbox" 
+                    className="peer sr-only"
+                    checked={user?.isPublic}
+                    onChange={(e) => setUser({ ...user, isPublic: e.target.checked })}
+                  />
+                  <div className="w-8 h-4.5 bg-white/10 rounded-full peer-checked:bg-primary/50 transition-colors duration-300 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-3.5 border border-white/10" />
+                </div>
+                <span className="text-[10px] font-bold text-white/70 group-hover:text-white transition-colors">Public Profile Status</span>
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {/* Day Select */}
-                <div className="relative group/date dropdown-container">
-                  <button
-                    type="button"
-                    onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'day' ? null : 'day')}
-                    className={cn(
-                      "input-field-premium h-10 sm:h-11 flex items-center justify-between text-left",
-                      activeDropdownIdx === 'day' && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
-                    )}
-                  >
-                    <span className={user?.dob ? "text-white text-xs" : "text-white/20 text-xs"}>
-                      {user?.dob ? new Date(user.dob).getUTCDate() : 'Day'}
-                    </span>
-                    <ChevronDown className={cn("w-3.5 h-3.5 text-white/20 transition-transform duration-300", activeDropdownIdx === 'day' && "rotate-180 text-primary")} />
-                  </button>
-                  {activeDropdownIdx === 'day' && (
-                    <div className="absolute top-full left-0 mt-1.5 p-1.5 glass-liquid rounded-xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[200px]">
-                      <div className="grid grid-cols-7 gap-0.5 max-h-[180px] overflow-y-auto custom-scrollbar p-0.5">
-                        {[...Array(31)].map((_, i) => (
-                          <button
-                            key={i+1}
-                            type="button"
-                            onClick={() => { handleDateChange('day', i+1); setActiveDropdownIdx(null); }}
-                            className="w-7 h-7 flex items-center justify-center rounded-md text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
-                          >
-                            {i+1}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
 
-                {/* Month Select */}
-                <div className="relative group/date dropdown-container">
-                  <button
-                    type="button"
-                    onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'month' ? null : 'month')}
-                    className={cn(
-                      "input-field-premium h-10 sm:h-11 flex items-center justify-between text-left",
-                      activeDropdownIdx === 'month' && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
-                    )}
-                  >
-                    <span className={user?.dob ? "text-white text-xs" : "text-white/20 text-xs"}>
-                      {user?.dob ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][new Date(user.dob).getUTCMonth()] : 'Month'}
-                    </span>
-                    <ChevronDown className={cn("w-3.5 h-3.5 text-white/20 transition-transform duration-300", activeDropdownIdx === 'month' && "rotate-180 text-primary")} />
-                  </button>
-                  {activeDropdownIdx === 'month' && (
-                    <div className="absolute top-full left-0 right-0 mt-1.5 p-1 glass-liquid rounded-xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[120px]">
-                      <div className="grid grid-cols-1 gap-0.5 max-h-[220px] overflow-y-auto custom-scrollbar p-0.5">
-                        {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            onClick={() => { handleDateChange('month', i); setActiveDropdownIdx(null); }}
-                            className="w-full px-3 py-2 text-left rounded-lg text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
-                          >
-                            {m}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+              <label className="flex items-center gap-2.5 cursor-pointer group">
+                 <div className="relative flex items-center">
+                  <input 
+                    type="checkbox" 
+                    className="peer sr-only"
+                    checked={user?.showDob}
+                    onChange={(e) => setUser({ ...user, showDob: e.target.checked })}
+                  />
+                  <div className="w-8 h-4.5 bg-white/10 rounded-full peer-checked:bg-accent/50 transition-colors duration-300 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-3.5 border border-white/10" />
                 </div>
-
-                {/* Year Select */}
-                <div className="relative group/date dropdown-container">
-                  <button
-                    type="button"
-                    onClick={() => setActiveDropdownIdx(activeDropdownIdx === 'year' ? null : 'year')}
-                    className={cn(
-                      "input-field-premium h-10 sm:h-11 flex items-center justify-between text-left",
-                      activeDropdownIdx === 'year' && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
-                    )}
-                  >
-                    <span className={user?.dob ? "text-white text-xs" : "text-white/20 text-xs"}>
-                      {user?.dob ? new Date(user.dob).getUTCFullYear() : 'Year'}
-                    </span>
-                    <ChevronDown className={cn("w-3.5 h-3.5 text-white/20 transition-transform duration-300", activeDropdownIdx === 'year' && "rotate-180 text-primary")} />
-                  </button>
-                  {activeDropdownIdx === 'year' && (
-                    <div className="absolute top-full left-0 right-0 mt-1.5 p-1 glass-liquid rounded-xl z-[80] shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[100px]">
-                      <div className="grid grid-cols-1 gap-0.5 max-h-[200px] overflow-y-auto custom-scrollbar p-0.5">
-                        {[...Array(100)].map((_, i) => {
-                          const year = new Date().getFullYear() - i;
-                          return (
-                            <button
-                              key={year}
-                              type="button"
-                              onClick={() => { handleDateChange('year', year); setActiveDropdownIdx(null); }}
-                              className="w-full px-3 py-1.5 text-left rounded-lg text-xs font-bold text-white/60 hover:text-white hover:bg-primary/20 transition-all active:scale-95"
-                            >
-                              {year}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+                <span className="text-[10px] font-bold text-white/70 group-hover:text-white transition-colors">Show Birthday Publicly</span>
+              </label>
             </div>
-
-            {/* Short Bio Block */}
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1">Short Bio</label>
-              <textarea
-                className="input-field-premium h-[42px] sm:h-11 py-2 px-3.5 resize-none leading-relaxed text-xs sm:text-sm custom-scrollbar"
-                placeholder="Tell the world about yourself..."
-                value={user?.bio || ''}
-                onChange={(e) => setUser({ ...user, bio: e.target.value })}
-              />
-            </div>
-          </div>
-
-          {/* Row 3: Visibility Switches directly integrated at bottom */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 pt-4 border-t border-white/[0.05]">
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <div className="relative flex items-center">
-                <input 
-                  type="checkbox" 
-                  className="peer sr-only"
-                  checked={user?.isPublic}
-                  onChange={(e) => setUser({ ...user, isPublic: e.target.checked })}
-                />
-                <div className="w-9 h-5 bg-white/10 rounded-full peer-checked:bg-primary/50 transition-colors duration-300 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4 border border-white/10" />
-              </div>
-              <span className="text-[11px] font-bold text-white/70 group-hover:text-white transition-colors">Public Profile Status</span>
-            </label>
-
-            <label className="flex items-center gap-3 cursor-pointer group">
-               <div className="relative flex items-center">
-                <input 
-                  type="checkbox" 
-                  className="peer sr-only"
-                  checked={user?.showDob}
-                  onChange={(e) => setUser({ ...user, showDob: e.target.checked })}
-                />
-                <div className="w-9 h-5 bg-white/10 rounded-full peer-checked:bg-accent/50 transition-colors duration-300 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4 border border-white/10" />
-              </div>
-              <span className="text-[11px] font-bold text-white/70 group-hover:text-white transition-colors">Show Birthday Publicly</span>
-            </label>
           </div>
         </div>
 
         {/* Social Links */}
-        <div className="glass-card p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] space-y-8 border-white/5">
+        <div className="glass-card p-4 sm:p-5 rounded-[2rem] space-y-4 border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-1.5 h-6 bg-accent rounded-full" />
-              <h2 className="text-xl font-black text-white tracking-tight">Social Connects</h2>
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-4 bg-accent rounded-full" />
+              <h2 className="text-sm sm:text-base font-black text-white tracking-tight">Social Connects</h2>
             </div>
             <button
               type="button"
               onClick={addSocialLink}
-              className="px-5 py-2.5 rounded-xl bg-accent/10 text-accent hover:bg-accent/20 transition-all flex items-center gap-2 text-xs font-bold active:scale-95 border border-accent/20"
+              className="px-3.5 py-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-all flex items-center gap-1.5 text-[10px] font-bold active:scale-95 border border-accent/20 cursor-pointer"
             >
-              <Plus className="w-4 h-4" /> Link Platform
+              <Plus className="w-3.5 h-3.5" /> Link Platform
             </button>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {user?.socialLinks?.map((link, index) => {
               const platforms = [
                 { id: 'website', name: 'Personal Website', placeholder: 'https://yourwebsite.com' },
@@ -450,32 +408,32 @@ export default function ProfilePage() {
                 <div 
                   key={index} 
                   className={cn(
-                    "glass-card p-2 sm:p-2.5 rounded-2xl border-white/5 relative group transition-all duration-300",
-                    activeDropdownIdx === index ? "z-[70] shadow-2xl ring-1 ring-white/10 !hover:translate-y-0" : "z-10 hover:bg-white/[0.04]",
+                    "glass-card p-1.5 sm:p-2 rounded-xl border-white/5 relative group transition-all duration-300 bg-white/[0.01]",
+                    activeDropdownIdx === index ? "z-[70] shadow-2xl ring-1 ring-white/10 !hover:translate-y-0" : "z-10 hover:bg-white/[0.03]",
                     activeDropdownIdx !== null && activeDropdownIdx !== index && "opacity-50 blur-[1px] grayscale-[0.2] pointer-events-none scale-[0.98]",
                   )}
                 >
-                  <div className="flex flex-row items-center gap-2 sm:gap-3 w-full">
+                  <div className="flex flex-row items-center gap-2 w-full">
                     {/* Premium Custom Dropdown */}
-                    <div className="platform-dropdown-container dropdown-container relative w-[130px] sm:w-[180px] md:w-[200px] shrink-0">
+                    <div className="platform-dropdown-container dropdown-container relative w-[110px] sm:w-[150px] md:w-[170px] shrink-0">
                       <button
                         type="button"
                         onClick={() => setActiveDropdownIdx(activeDropdownIdx === index ? null : index)}
                         className={cn(
-                          "w-full h-10 sm:h-11 px-2.5 sm:px-4 rounded-xl bg-white/5 border border-white/10 text-xs sm:text-sm font-bold flex items-center justify-between transition-all hover:bg-white/10 cursor-pointer",
+                          "w-full h-9 px-2.5 rounded-lg bg-white/5 border border-white/10 text-xs font-bold flex items-center justify-between transition-all hover:bg-white/10 cursor-pointer",
                           activeDropdownIdx === index && "ring-2 ring-primary/40 border-primary/20 bg-white/10"
                         )}
                       >
-                        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                          <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0" />
-                          <span className="truncate text-white">{currentPlatform.name}</span>
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <Icon className="w-3.5 h-3.5 text-primary shrink-0" />
+                          <span className="truncate text-white text-[11px]">{currentPlatform.name}</span>
                         </div>
-                        <ChevronDown className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/20 transition-transform duration-300 shrink-0", activeDropdownIdx === index && "rotate-180 text-primary")} />
+                        <ChevronDown className={cn("w-3 h-3 text-white/20 transition-transform duration-300 shrink-0", activeDropdownIdx === index && "rotate-180 text-primary")} />
                       </button>
 
                       {activeDropdownIdx === index && (
-                        <div className="absolute top-full left-0 mt-2 p-1 glass-liquid rounded-xl z-50 shadow-[0_10px_30px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in-95 duration-200 w-[160px] sm:w-full">
-                          <div className="grid grid-cols-1 gap-0.5 max-h-[220px] overflow-y-auto custom-scrollbar p-0.5">
+                        <div className="absolute top-full left-0 mt-1.5 p-1 glass-liquid rounded-lg z-50 shadow-[0_10px_30px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in-95 duration-200 w-[150px] sm:w-full">
+                          <div className="grid grid-cols-1 gap-0.5 max-h-[180px] overflow-y-auto custom-scrollbar p-0.5">
                             {platforms.map(p => {
                               const ItemIcon = SOCIAL_ICONS[p.id] || SOCIAL_ICONS.default;
                               return (
@@ -484,14 +442,14 @@ export default function ProfilePage() {
                                   type="button"
                                   onClick={() => updateSocialLink(index, 'platform', p.id)}
                                   className={cn(
-                                    "w-full px-2.5 py-2 rounded-lg flex items-center gap-2 sm:gap-2.5 transition-all text-xs sm:text-sm font-medium active:scale-[0.98] group/item text-left cursor-pointer",
+                                    "w-full px-2 py-1.5 rounded flex items-center gap-2 transition-all text-xs font-medium active:scale-[0.98] group/item text-left cursor-pointer",
                                     link.platform === p.id 
                                       ? "bg-primary/30 text-white border border-primary/20 shadow-lg shadow-primary/10" 
                                       : "text-muted-foreground hover:text-white hover:bg-white/10"
                                   )}
                                 >
                                   <ItemIcon className="w-3.5 h-3.5 shrink-0" />
-                                  <span className="truncate">{p.name}</span>
+                                  <span className="truncate text-[11px]">{p.name}</span>
                                 </button>
                               );
                             })}
@@ -504,13 +462,13 @@ export default function ProfilePage() {
                     <div className="flex-1 min-w-0 relative group/input">
                       <input
                         type="url"
-                        className="w-full h-10 sm:h-11 pl-3.5 pr-8 sm:pl-4.5 sm:pr-10 rounded-xl bg-white/5 border border-white/10 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 hover:bg-white/[0.08] transition-all font-medium tracking-tight text-white"
+                        className="w-full h-9 pl-3 pr-8 rounded-lg bg-white/5 border border-white/10 text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 hover:bg-white/[0.08] transition-all font-medium tracking-tight text-white"
                         placeholder={currentPlatform.placeholder}
                         value={link.url}
                         onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
                         onBlur={(e) => updateSocialLink(index, 'url', normalizeSocialLink(link.platform, e.target.value))}
                       />
-                      <div className="absolute right-2.5 sm:right-3.5 top-1/2 -translate-y-1/2 opacity-20 group-hover/input:opacity-50 transition-opacity">
+                      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 opacity-20 group-hover/input:opacity-50 transition-opacity">
                         <Globe className="w-3.5 h-3.5 text-white" />
                       </div>
                     </div>
@@ -519,10 +477,10 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={() => removeSocialLink(index)}
-                      className="h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center shrink-0 rounded-xl bg-white/5 hover:bg-red-500/10 text-white/40 hover:text-red-400 border border-white/5 hover:border-red-500/10 transition-all duration-200 active:scale-95 cursor-pointer"
+                      className="h-9 w-9 flex items-center justify-center shrink-0 rounded-lg bg-white/5 hover:bg-red-500/10 text-white/40 hover:text-red-400 border border-white/5 hover:border-red-500/10 transition-all duration-200 active:scale-95 cursor-pointer"
                       title="Remove Link"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -530,24 +488,25 @@ export default function ProfilePage() {
             })}
             
             {user?.socialLinks?.length === 0 && (
-              <div className="text-center py-16 border border-dashed border-white/10 rounded-3xl bg-white/[0.01]">
-                <Globe className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm font-medium">Your profile is missing social connects.</p>
-                <p className="text-xs text-muted-foreground/60 mt-1">Add links to your favorite platforms to get started.</p>
+              <div className="text-center py-10 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+                <Globe className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
+                <p className="text-muted-foreground text-xs font-medium">Your profile is missing social connects.</p>
+                <p className="text-[10px] text-muted-foreground/60 mt-0.5">Add links to your favorite platforms to get started.</p>
               </div>
             )}
           </div>
         </div>
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end pt-2">
           <button
             type="submit"
             disabled={saving}
-            className="btn-premium min-w-[180px] h-12 text-sm"
+            className="btn-premium min-w-[150px] h-11 text-xs"
           >
-            {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /> Deploy Changes</>}
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-3.5 h-3.5" /> Deploy Changes</>}
           </button>
         </div>
+        
         {showCropModal && (
           <ImageCropModal
             image={selectedImage}
@@ -557,6 +516,75 @@ export default function ProfilePage() {
         )}
       </form>
 
+      {/* iOS-Style "SET BIRTHDAY" Wheel Picker Modal */}
+      {showBirthdayModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"
+            onClick={() => setShowBirthdayModal(false)}
+          />
+          
+          <div className="relative w-full max-w-[320px] bg-[#0c0c0e] border border-white/10 rounded-[2rem] shadow-2xl p-6 space-y-6 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+            
+            <style>{`
+              .no-scrollbar::-webkit-scrollbar {
+                display: none !important;
+              }
+            `}</style>
+
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 -mx-6 px-6">
+              <div className="w-6" />
+              <h3 className="text-[11px] font-bold uppercase text-white tracking-[0.2em] text-center pl-6">SET BIRTHDAY</h3>
+              <button
+                type="button"
+                onClick={() => setShowBirthdayModal(false)}
+                className="text-white/40 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5 stroke-[1.5]" />
+              </button>
+            </div>
+
+            {/* Custom Wheel Selector Component */}
+            <div className="relative flex items-center justify-center pt-2">
+              {/* Central Highlight Band */}
+              <div className="absolute left-0 right-0 h-10 bg-white/[0.06] pointer-events-none" />
+              
+              <div className="flex w-full gap-2 relative z-10">
+                <WheelPickerColumn 
+                  items={yearsArray} 
+                  value={tempYear} 
+                  onChange={(val) => setTempYear(val)} 
+                />
+                <WheelPickerColumn 
+                  items={monthsArray} 
+                  value={tempMonth} 
+                  onChange={(val) => setTempMonth(val)} 
+                />
+                <WheelPickerColumn 
+                  items={daysArray} 
+                  value={tempDay} 
+                  onChange={(val) => setTempDay(val)} 
+                />
+              </div>
+
+              {/* Gradient cylinder overlays to fade top and bottom */}
+              <div className="absolute top-0 left-0 right-0 h-[60px] bg-gradient-to-b from-[#0c0c0e] to-transparent pointer-events-none z-20" />
+              <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-gradient-to-t from-[#0c0c0e] to-transparent pointer-events-none z-20" />
+            </div>
+
+            {/* Submit Button matches image exactly */}
+            <button
+              type="button"
+              onClick={handleSubmitBirthday}
+              className="w-full h-12 rounded-full bg-white hover:bg-white/90 text-black font-black uppercase text-xs tracking-widest flex items-center justify-center transition-all active:scale-[0.98] cursor-pointer"
+            >
+              SUBMIT
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Modal */}
       {linkToDelete !== null && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -564,26 +592,26 @@ export default function ProfilePage() {
             className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"
             onClick={() => setLinkToDelete(null)}
           />
-          <div className="relative w-full max-w-[320px] bg-[#1c1c1e] rounded-[2rem] overflow-hidden shadow-2xl animate-in zoom-in-95 fade-in duration-300">
+          <div className="relative w-full max-w-[300px] bg-[#1c1c1e] rounded-[2rem] overflow-hidden shadow-2xl animate-in zoom-in-95 fade-in duration-300">
             <div className="p-8 text-center space-y-2">
-              <h3 className="text-lg font-bold text-white">Delete this link?</h3>
-              <p className="text-sm text-white/60 leading-relaxed px-2">
+              <h3 className="text-base font-bold text-white">Delete this link?</h3>
+              <p className="text-xs text-white/60 leading-relaxed px-2">
                 Are you sure you want to delete this link?<br /> This action cannot be undone.
               </p>
             </div>
             
-            <div className="flex border-t border-white/5 h-14">
+            <div className="flex border-t border-white/5 h-12">
               <button
                 type="button"
                 onClick={() => setLinkToDelete(null)}
-                className="flex-1 text-[17px] font-medium text-[#0A84FF] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors border-r border-white/5"
+                className="flex-1 text-sm font-medium text-[#0A84FF] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors border-r border-white/5 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={confirmDelete}
-                className="flex-1 text-[17px] font-medium text-[#FF453A] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors"
+                className="flex-1 text-sm font-medium text-[#FF453A] hover:bg-white/[0.02] active:bg-white/[0.05] transition-colors cursor-pointer"
               >
                 Delete
               </button>
@@ -591,6 +619,91 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Reusable custom wheel selector column component
+function WheelPickerColumn({ items, value, onChange }) {
+  const containerRef = useRef(null);
+  const scrollTimeoutRef = useRef(null);
+
+  const selectedIndex = items.indexOf(value);
+
+  useEffect(() => {
+    if (containerRef.current && selectedIndex !== -1) {
+      const targetScrollTop = selectedIndex * 40;
+      if (containerRef.current.scrollTop !== targetScrollTop) {
+        containerRef.current.scrollTo({
+          top: targetScrollTop,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [selectedIndex]);
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (!containerRef.current) return;
+      const scrollTop = containerRef.current.scrollTop;
+      const index = Math.round(scrollTop / 40);
+      const safeIndex = Math.max(0, Math.min(items.length - 1, index));
+      const newValue = items[safeIndex];
+      if (newValue !== value) {
+        onChange(newValue);
+      }
+    }, 120);
+  };
+
+  const handleItemClick = (index) => {
+    const newValue = items[index];
+    if (newValue !== value) {
+      onChange(newValue);
+    }
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: index * 40,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  return (
+    <div className="relative flex-1 h-[200px] overflow-hidden">
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="h-full overflow-y-auto snap-y snap-mandatory no-scrollbar py-[80px]"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {items.map((item, idx) => {
+          const isSelected = idx === selectedIndex;
+          const isNeighbor1 = Math.abs(idx - selectedIndex) === 1;
+          const isNeighbor2 = Math.abs(idx - selectedIndex) === 2;
+          
+          return (
+            <div
+              key={item}
+              onClick={() => handleItemClick(idx)}
+              className={cn(
+                "h-10 snap-center flex items-center justify-center cursor-pointer select-none text-center transition-all duration-300 font-semibold",
+                isSelected ? "text-white text-[17px] font-black scale-105" : 
+                isNeighbor1 ? "text-white/40 text-sm font-bold" : 
+                isNeighbor2 ? "text-white/20 text-xs" : 
+                "text-white/5 text-[10px]"
+              )}
+            >
+              {item}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

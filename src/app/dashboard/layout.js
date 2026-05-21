@@ -50,30 +50,30 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-foreground flex selection:bg-primary/30">
+    <div className="min-h-screen bg-[#09090b] text-foreground flex selection:bg-primary/30" suppressHydrationWarning>
       {/* Background Blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10" suppressHydrationWarning>
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/5 rounded-full blur-[120px]" />
       </div>
 
       {/* Sidebar - Desktop */}
-      <aside className="w-72 border-r border-white/5 bg-black/40 backdrop-blur-2xl hidden md:flex flex-col fixed h-full z-40">
+      <aside className="w-72 border-r border-white/5 bg-black/40 backdrop-blur-2xl hidden md:flex flex-col fixed h-full z-40" suppressHydrationWarning>
         <div className="p-8">
           <Logo />
         </div>
         
         {/* User Card in Sidebar */}
-        <div className="px-6 mb-8">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+        <div className="px-6 mb-8" suppressHydrationWarning>
+          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-3" suppressHydrationWarning>
+             <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden" suppressHydrationWarning>
                 {user?.image ? (
                   <img src={user.image} alt="User" className="w-full h-full object-cover" />
                 ) : (
                   <UserIcon className="w-5 h-5 text-primary" />
                 )}
              </div>
-             <div className="flex-1 min-w-0">
+             <div className="flex-1 min-w-0" suppressHydrationWarning>
                <p className="text-sm font-bold truncate">{user?.name || user?.username || 'User'}</p>
                <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Free Plan</p>
              </div>
