@@ -207,58 +207,48 @@ export default function Home() {
   const activePlatformConfig = socialPlatforms.find(p => p.id === currentPlatform) || socialPlatforms[0];
 
   return (
-    <main className="min-h-screen bg-[#09090b] text-[#fafafa] overflow-hidden select-none font-sans">
+    <main className="min-h-screen bg-background text-foreground overflow-hidden select-none font-sans">
       <Navbar />
 
-      {/* SECTION 1: HERO SECTION (Sky Editorial Theme with Angle Mask) */}
-      <section className="relative pt-32 pb-44 px-6 overflow-hidden flex flex-col items-center">
-        {/* Sky Background Wrapper with Polygonal Chevron/Trapezoid Mask */}
-        <div className="absolute top-0 left-0 w-full h-[85%] md:h-[88%] -z-20 bg-gradient-to-b from-[#1b64d7] via-[#4895ef] to-[#eceef2] overflow-hidden" 
-             style={{ 
-               clipPath: 'polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%)' 
-             }}>
-          
-          {/* Subtle clouds background image layers */}
-          <div className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none"
-               style={{
-                 backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(255,255,255,0.8), transparent 70%)'
-               }} />
-
-          {/* Animated clouds elements */}
-          <div className="absolute top-20 left-10 w-96 h-36 bg-white/30 rounded-full blur-[80px] animate-pulse pointer-events-none" style={{ animationDuration: '8s' }} />
-          <div className="absolute top-44 right-10 w-[450px] h-48 bg-white/40 rounded-full blur-[90px] animate-pulse pointer-events-none" style={{ animationDuration: '12s' }} />
+      {/* SECTION 1: HERO */}
+      <section className="relative isolate pt-32 pb-44 px-6 overflow-hidden flex flex-col items-center">
+        {/* Sky background — z-0 so it stays above page bg */}
+        <div
+          className="hero-sky absolute top-0 left-0 w-full h-full min-h-[720px] z-0 pointer-events-none overflow-hidden"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%)' }}
+        >
+          <div className="absolute inset-0 hero-sky-glow opacity-50" />
+          <div className="absolute top-20 left-10 w-96 h-36 bg-white/25 rounded-full blur-[80px] animate-pulse pointer-events-none" style={{ animationDuration: '8s' }} />
+          <div className="absolute top-44 right-10 w-[450px] h-48 bg-white/35 rounded-full blur-[90px] animate-pulse pointer-events-none" style={{ animationDuration: '12s' }} />
         </div>
 
-        {/* Hero Content Grid */}
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10">
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Column: Core Value Pitch */}
-          <div className="lg:col-span-6 flex flex-col text-center lg:text-left items-center lg:items-start text-white space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 text-white text-[11px] font-black uppercase tracking-widest backdrop-blur-md shadow-sm border border-white/20 animate-bounce-slow">
-              <Sparkles className="w-3.5 h-3.5 text-yellow-300" /> Unify your digital world
+          {/* Left: headline */}
+          <div className="lg:col-span-6 flex flex-col text-center lg:text-left items-center lg:items-start hero-copy space-y-6">
+            <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-sm animate-bounce-slow">
+              <Sparkles className="w-3.5 h-3.5 hero-badge-icon" /> Unify your digital world
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.08] drop-shadow-sm">
+            <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.08]">
               The union of your <br />
-              <span className="text-[#fcd34d] drop-shadow-md">digital identity</span> <br />
+              <span className="hero-accent">digital identity</span> <br />
               begins here
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-xl leading-relaxed font-medium">
+            <p className="hero-subtitle text-sm sm:text-base md:text-lg max-w-xl leading-relaxed font-medium">
               Create a luxury landing profile page in seconds. Consolidate your social media, share a universal link or organic QR code, and track click metrics in real-time.
             </p>
 
-            {/* Premium CTA Row */}
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <Link href="/signup" className="btn-premium w-full sm:w-auto h-12 px-8 text-xs font-black uppercase tracking-wider shadow-xl shadow-blue-800/10">
+              <Link href="/signup" className="btn-premium w-full sm:w-auto h-12 px-8 text-xs font-black uppercase tracking-wider shadow-xl shadow-primary/20">
                 Get Started in 30s <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
-              <a href="#estimations" className="w-full sm:w-auto h-12 px-8 text-xs font-black uppercase tracking-wider inline-flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 backdrop-blur-md text-white transition-all active:scale-[0.98] cursor-pointer">
+              <a href="#estimations" className="hero-secondary-cta w-full sm:w-auto h-12 px-8 text-xs font-black uppercase tracking-wider inline-flex items-center justify-center rounded-xl transition-all active:scale-[0.98] cursor-pointer">
                 <Play className="w-3.5 h-3.5 mr-2 fill-current" /> Watch Potential
               </a>
             </div>
 
-            {/* Social Trust Metrics */}
             <div className="pt-4 flex flex-col sm:flex-row items-center gap-3">
               <div className="flex -space-x-1.5">
                 <img className="h-7 w-7 rounded-full ring-2 ring-blue-500 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="user" />
@@ -266,8 +256,8 @@ export default function Home() {
                 <img className="h-7 w-7 rounded-full ring-2 ring-blue-500 object-cover" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="user" />
                 <img className="h-7 w-7 rounded-full ring-2 ring-blue-500 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="user" />
               </div>
-              <div className="text-[11px] font-extrabold uppercase tracking-wider text-white/90">
-                Loved by <span className="text-[#fcd34d] font-black">12,000+ creators</span> worldwide ⭐⭐⭐⭐⭐
+              <div className="hero-social-proof text-[11px] font-extrabold uppercase tracking-wider">
+                Loved by <span className="hero-accent font-black">12,000+ creators</span> worldwide ⭐⭐⭐⭐⭐
               </div>
             </div>
           </div>
@@ -295,8 +285,8 @@ export default function Home() {
             </div>
 
             {/* Interactive Widget B: Floating Live Views Area Chart */}
-            <div className="absolute bottom-16 right-0 sm:right-6 z-20 p-3 rounded-2xl bg-[#09090b]/80 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] backdrop-blur-md flex flex-col gap-1 w-[130px] sm:w-[150px] animate-bounce-slow" style={{ animationDelay: '1.2s' }}>
-              <span className="text-[8.5px] font-black tracking-widest text-white/40 uppercase">LIVE PROFILE VIEWS</span>
+            <div className="absolute bottom-16 right-0 sm:right-6 z-20 p-3 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl backdrop-blur-md flex flex-col gap-1 w-[130px] sm:w-[150px] animate-bounce-slow" style={{ animationDelay: '1.2s' }}>
+              <span className="text-[8.5px] font-black tracking-widest text-slate-400 uppercase">LIVE PROFILE VIEWS</span>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-sm sm:text-base font-black text-white">12,490</span>
                 <span className="text-[8px] font-extrabold text-green-400">+124%</span>
@@ -317,7 +307,7 @@ export default function Home() {
             </div>
 
             {/* Interactive Widget C: Connected Platforms Pill */}
-            <div className="absolute bottom-28 left-0 sm:left-4 z-20 flex items-center gap-2 p-2 px-3.5 rounded-full bg-white/30 border border-white/20 shadow-lg backdrop-blur-xl text-white text-[9px] font-black uppercase tracking-wider animate-bounce-slow" style={{ animationDelay: '0.6s' }}>
+            <div className="absolute bottom-28 left-0 sm:left-4 z-20 flex items-center gap-2 p-2 px-3.5 rounded-full bg-white/95 border border-slate-200 shadow-lg text-slate-800 text-[9px] font-black uppercase tracking-wider animate-bounce-slow dark:bg-white/30 dark:border-white/20 dark:text-white" style={{ animationDelay: '0.6s' }}>
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -336,7 +326,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 2: CONNECTION NETWORK HUB (Circuit Path Layout) */}
-      <section className="py-28 px-6 max-w-7xl mx-auto w-full relative">
+      <section id="features" className="py-28 px-6 max-w-7xl mx-auto w-full relative scroll-mt-24">
         {/* Background micro grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none -z-10" />
 
@@ -348,7 +338,7 @@ export default function Home() {
             A clear entry to the <br />
             <span className="gradient-text">connected universe</span> of platforms
           </h2>
-          <p className="text-sm text-white/50 max-w-lg mx-auto font-medium">
+          <p className="text-sm text-muted-foreground max-w-lg mx-auto font-medium">
             Never struggle with multiple bio links again. Weave all your accounts, files, and channels into one single universal canvas.
           </p>
         </div>
@@ -358,7 +348,7 @@ export default function Home() {
           
           {/* Left Column: Social Network Selection Capsules */}
           <div className="lg:col-span-5 flex flex-col gap-4">
-            <h3 className="text-lg font-black tracking-wider text-white/30 uppercase pl-2">ACTIVE CHANNELS</h3>
+            <h3 className="text-lg font-black tracking-wider text-muted-foreground uppercase pl-2">ACTIVE CHANNELS</h3>
             
             <div className="flex flex-col gap-3">
               {socialPlatforms.map((platform) => {
@@ -373,7 +363,7 @@ export default function Home() {
                     className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all text-left cursor-pointer ${
                       isSelected
                         ? `bg-white/[0.04] text-white shadow-md`
-                        : 'bg-white/[0.01] border-white/5 text-white/40 hover:bg-white/[0.02] hover:text-white/80'
+                        : 'bg-white/[0.01] border-white/5 text-muted-foreground hover:bg-white/[0.02] hover:text-white/80'
                     }`}
                     style={{
                       borderColor: isSelected ? `${platform.color}40` : '',
@@ -391,7 +381,7 @@ export default function Home() {
                       <div className="flex flex-col">
                         <span className="text-sm font-black tracking-tight">{platform.name}</span>
                         {isSelected && (
-                          <span className="text-[11px] text-white/60 font-medium mt-0.5 leading-snug animate-in fade-in duration-300">
+                          <span className="text-[11px] text-muted-foreground font-medium mt-0.5 leading-snug animate-in fade-in duration-300">
                             {platform.description}
                           </span>
                         )}
@@ -487,11 +477,11 @@ export default function Home() {
                   </div>
                   
                   <div>
-                    <h4 className="text-[12px] font-black tracking-tight text-white leading-tight">{activePlatformConfig.mockData.name}</h4>
-                    <p className="text-[9px] font-bold text-white/40 leading-none mt-0.5">{activePlatformConfig.mockData.handle}</p>
+                    <h4 className="text-[12px] font-black tracking-tight text-foreground dark:text-white leading-tight">{activePlatformConfig.mockData.name}</h4>
+                    <p className="text-[9px] font-bold text-muted-foreground leading-none mt-0.5">{activePlatformConfig.mockData.handle}</p>
                   </div>
 
-                  <p className="text-[9px] font-semibold text-white/60 leading-relaxed px-4 max-w-[200px] mx-auto min-h-[30px] line-clamp-2">
+                  <p className="text-[9px] font-semibold text-muted-foreground leading-relaxed px-4 max-w-[200px] mx-auto min-h-[30px] line-clamp-2">
                     {activePlatformConfig.mockData.bio}
                   </p>
                 </div>
@@ -506,10 +496,10 @@ export default function Home() {
                   </div>
 
                   {/* Secondary items presets for preview */}
-                  <div className="w-full py-2 px-4 rounded-full bg-white/[0.02] border border-white/5 text-center text-[9px] font-bold text-white/40">
+                  <div className="w-full py-2 px-4 rounded-full bg-white/[0.02] border border-white/5 text-center text-[9px] font-bold text-muted-foreground">
                     Visit Portfolio Gallery
                   </div>
-                  <div className="w-full py-2 px-4 rounded-full bg-white/[0.02] border border-white/5 text-center text-[9px] font-bold text-white/40">
+                  <div className="w-full py-2 px-4 rounded-full bg-white/[0.02] border border-white/5 text-center text-[9px] font-bold text-muted-foreground">
                     Send Anonymous Message
                   </div>
                 </div>
@@ -519,7 +509,7 @@ export default function Home() {
                   <span className={`text-[9px] font-black tracking-widest uppercase transition-colors duration-500 ${activePlatformConfig.accentText}`}>
                     {activePlatformConfig.mockData.stats}
                   </span>
-                  <div className="text-[7.5px] font-bold text-white/20 mt-1 uppercase tracking-widest">REAL-TIME CLICK METRICS</div>
+                  <div className="text-[7.5px] font-bold text-muted-foreground/70 mt-1 uppercase tracking-widest">REAL-TIME CLICK METRICS</div>
                 </div>
 
               </div>
@@ -534,7 +524,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 3: INTERACTIVE CLICK & ENGAGEMENT ESTIMATOR */}
-      <section id="estimations" className="py-28 px-6 max-w-7xl mx-auto w-full relative">
+      <section id="estimations" className="py-28 px-6 max-w-7xl mx-auto w-full relative scroll-mt-24">
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fcd34d]/10 text-[#fcd34d] text-[10px] font-black uppercase tracking-widest border border-[#fcd34d]/20">
             Live Estimator
@@ -543,7 +533,7 @@ export default function Home() {
             Estimate your digital <br />
             <span className="gradient-text">growth potential</span>
           </h2>
-          <p className="text-sm text-white/50 max-w-lg mx-auto font-medium">
+          <p className="text-sm text-muted-foreground max-w-lg mx-auto font-medium">
             Configure your active metrics to project potential link engagement, visitor conversion rates, and monthly CTR growth using our premium system.
           </p>
         </div>
@@ -552,17 +542,17 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch pt-4">
           
           {/* Left Column: Estimator Control Panel */}
-          <div className="lg:col-span-6 p-6 sm:p-8 rounded-[2.5rem] bg-[#13141a]/95 border border-white/[0.06] shadow-xl flex flex-col justify-between">
+          <div className="lg:col-span-6 p-6 sm:p-8 rounded-[2.5rem] glass-card flex flex-col justify-between">
             <div className="space-y-6">
-              <h3 className="text-lg font-black tracking-tight text-white flex items-center gap-2">
+              <h3 className="text-lg font-black tracking-tight text-foreground dark:text-white flex items-center gap-2">
                 <Sliders className="w-5 h-5 text-violet-400" /> Control Panel
               </h3>
 
               {/* Controller 1: Total Followers Slider */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-bold text-white/40 uppercase tracking-widest pl-1">Audience Size</label>
-                  <span className="text-sm font-black text-white px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest pl-1">Audience Size</label>
+                  <span className="text-sm font-black text-foreground dark:text-white px-2 py-0.5 rounded bg-foreground/5 dark:bg-white/5 border border-border">
                     {followers.toLocaleString()} followers
                   </span>
                 </div>
@@ -575,7 +565,7 @@ export default function Home() {
                   onChange={(e) => setFollowers(parseInt(e.target.value))}
                   className="w-full accent-violet-500 h-1.5 bg-white/5 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] font-bold text-white/30 px-1">
+                <div className="flex justify-between text-[10px] font-bold text-muted-foreground px-1">
                   <span>1k</span>
                   <span>50k</span>
                   <span>100k</span>
@@ -585,14 +575,14 @@ export default function Home() {
 
               {/* Controller 2: Engagement Level Capsule switches */}
               <div className="space-y-3">
-                <label className="text-[11px] font-bold text-white/40 uppercase tracking-widest pl-1">Audience Engagement</label>
+                <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest pl-1">Audience Engagement</label>
                 <div className="bg-white/5 p-1 rounded-xl grid grid-cols-3 gap-2 border border-white/5">
                   <button
                     onClick={() => setEngagement('low')}
                     className={`py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
                       engagement === 'low'
                         ? 'bg-[#1c1d24] text-[#eceef2] border border-white/10 shadow-sm'
-                        : 'text-white/40 hover:text-white/60'
+                        : 'text-muted-foreground hover:text-muted-foreground'
                     }`}
                   >
                     Standard
@@ -602,7 +592,7 @@ export default function Home() {
                     className={`py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
                       engagement === 'moderate'
                         ? 'bg-[#1c1d24] text-[#eceef2] border border-white/10 shadow-sm'
-                        : 'text-white/40 hover:text-white/60'
+                        : 'text-muted-foreground hover:text-muted-foreground'
                     }`}
                   >
                     High
@@ -612,7 +602,7 @@ export default function Home() {
                     className={`py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
                       engagement === 'high'
                         ? 'bg-[#1c1d24] text-[#eceef2] border border-white/10 shadow-sm'
-                        : 'text-white/40 hover:text-white/60'
+                        : 'text-muted-foreground hover:text-muted-foreground'
                     }`}
                   >
                     Creator-level
@@ -622,7 +612,7 @@ export default function Home() {
 
               {/* Controller 3: Connected Platforms Selection checkboxes */}
               <div className="space-y-3">
-                <label className="text-[11px] font-bold text-white/40 uppercase tracking-widest pl-1">Platforms to Optimize</label>
+                <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest pl-1">Platforms to Optimize</label>
                 <div className="grid grid-cols-2 gap-3">
                   {['instagram', 'linkedin', 'github', 'youtube'].map((platformId) => {
                     const isSelected = selectedPlatforms.includes(platformId);
@@ -634,7 +624,7 @@ export default function Home() {
                         className={`flex items-center gap-3 p-3 rounded-xl border text-left cursor-pointer transition-all ${
                           isSelected
                             ? 'bg-violet-500/10 border-violet-500/30 text-white'
-                            : 'bg-white/[0.01] border-white/5 text-white/40 hover:bg-white/[0.02]'
+                            : 'bg-white/[0.01] border-white/5 text-muted-foreground hover:bg-white/[0.02]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded border flex items-center justify-center ${
@@ -651,20 +641,20 @@ export default function Home() {
 
             </div>
 
-            <div className="mt-8 pt-6 border-t border-white/5 text-[11px] font-bold text-white/30 pl-1 uppercase tracking-widest flex items-center gap-2">
+            <div className="mt-8 pt-6 border-t border-white/5 text-[11px] font-bold text-muted-foreground pl-1 uppercase tracking-widest flex items-center gap-2">
               <Lock className="w-3.5 h-3.5" /> Calculations based on live platform benchmarks
             </div>
 
           </div>
 
           {/* Right Column: Calculations Outputs and Live Progress visualizer */}
-          <div className="lg:col-span-6 p-6 sm:p-8 rounded-[2.5rem] bg-[#13141a]/95 border border-white/[0.06] shadow-xl flex flex-col justify-between relative overflow-hidden">
+          <div className="lg:col-span-6 p-6 sm:p-8 rounded-[2.5rem] glass-card flex flex-col justify-between relative overflow-hidden">
             
             {/* Soft decorative glow behind outputs */}
             <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-violet-600/10 rounded-full blur-[80px] pointer-events-none" />
 
             <div className="space-y-6">
-              <h3 className="text-lg font-black tracking-tight text-white flex items-center justify-between">
+              <h3 className="text-lg font-black tracking-tight text-foreground dark:text-white flex items-center justify-between">
                 <span>Projections Summary</span>
                 <span className="text-xs text-green-400 font-extrabold uppercase tracking-widest flex items-center gap-1.5 animate-pulse">
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full" /> Dynamic Log
@@ -676,49 +666,49 @@ export default function Home() {
                 
                 {/* Metric 1: Monthly Visits */}
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">MONTHLY VIEWS</span>
-                  <p className="text-2xl sm:text-3xl font-black text-white tracking-tight animate-in fade-in duration-300">
+                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">MONTHLY VIEWS</span>
+                  <p className="text-2xl sm:text-3xl font-black text-foreground dark:text-white tracking-tight animate-in fade-in duration-300">
                     {projectedViews.toLocaleString()}
                   </p>
-                  <p className="text-[10px] font-bold text-white/40 leading-none">Visits to universal bio</p>
+                  <p className="text-[10px] font-bold text-muted-foreground leading-none">Visits to universal bio</p>
                 </div>
 
                 {/* Metric 2: Estimated CTR */}
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">OPTIMIZED CTR</span>
+                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">OPTIMIZED CTR</span>
                   <p className="text-2xl sm:text-3xl font-black text-violet-400 tracking-tight animate-in fade-in duration-300">
                     {projectedCTR}%
                   </p>
-                  <p className="text-[10px] font-bold text-white/40 leading-none">Click-through rate boost</p>
+                  <p className="text-[10px] font-bold text-muted-foreground leading-none">Click-through rate boost</p>
                 </div>
 
                 {/* Metric 3: Total Engaged Clicks */}
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">TOTAL ROUTED CLICKS</span>
+                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">TOTAL ROUTED CLICKS</span>
                   <p className="text-2xl sm:text-3xl font-black text-[#fcd34d] tracking-tight animate-in fade-in duration-300">
                     {projectedClicks.toLocaleString()}
                   </p>
-                  <p className="text-[10px] font-bold text-white/40 leading-none">Clicks forwarded directly</p>
+                  <p className="text-[10px] font-bold text-muted-foreground leading-none">Clicks forwarded directly</p>
                 </div>
 
                 {/* Metric 4: Growth boost percent */}
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">CONVERSION BOOST</span>
+                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">CONVERSION BOOST</span>
                   <p className="text-2xl sm:text-3xl font-black text-green-400 tracking-tight animate-in fade-in duration-300">
                     +{growthPercent}%
                   </p>
-                  <p className="text-[10px] font-bold text-white/40 leading-none">Over traditional layout links</p>
+                  <p className="text-[10px] font-bold text-muted-foreground leading-none">Over traditional layout links</p>
                 </div>
 
               </div>
 
               {/* Progress dynamic bars visualizer representing optimization levels */}
               <div className="p-4 rounded-2xl bg-white/[0.01] border border-white/5 space-y-4">
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest pl-1 block">Optimization Benchmarks</span>
+                <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest pl-1 block">Optimization Benchmarks</span>
                 
                 <div className="space-y-3">
                   <div className="space-y-1">
-                    <div className="flex justify-between text-[10px] font-black uppercase text-white/60">
+                    <div className="flex justify-between text-[10px] font-black uppercase text-muted-foreground">
                       <span>Interactive Bio-Profile Efficiency</span>
                       <span>{Math.min(Math.round(projectedCTR * 8), 98)}%</span>
                     </div>
@@ -729,7 +719,7 @@ export default function Home() {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex justify-between text-[10px] font-black uppercase text-white/60">
+                    <div className="flex justify-between text-[10px] font-black uppercase text-muted-foreground">
                       <span>Click Leakage Protection</span>
                       <span>95%</span>
                     </div>
@@ -753,7 +743,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4: TESTIMONIAL GRIDS & CASES */}
-      <section className="py-28 px-6 max-w-7xl mx-auto w-full relative">
+      <section id="testimonials" className="py-28 px-6 max-w-7xl mx-auto w-full relative scroll-mt-24">
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
             Success Indicators
@@ -762,7 +752,7 @@ export default function Home() {
             The best minds have been <br />
             <span className="gradient-text">seeking approaches</span> to link optimization
           </h2>
-          <p className="text-sm text-white/50 max-w-lg mx-auto font-medium">
+          <p className="text-sm text-muted-foreground max-w-lg mx-auto font-medium">
             Discover how verified creators and marketing teams utilize Viewi to aggregate traffic, print custom QR presets, and claim audiences.
           </p>
         </div>
@@ -771,7 +761,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-4">
           
           {/* Panel A: Neon Analytics Card */}
-          <div className="md:col-span-6 p-8 rounded-[2.5rem] bg-[#0c0c0e] border border-white/[0.06] shadow-xl flex flex-col justify-between min-h-[380px] relative overflow-hidden">
+          <div className="md:col-span-6 p-8 rounded-[2.5rem] glass-card flex flex-col justify-between min-h-[380px] relative overflow-hidden">
             {/* Top segment title */}
             <div className="space-y-4 z-10">
               <div className="w-fit p-2.5 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400">
@@ -781,7 +771,7 @@ export default function Home() {
                 Analyzing the reach <br />
                 reveals the truth of click metrics
               </h3>
-              <p className="text-xs font-semibold text-white/50 leading-relaxed max-w-sm">
+              <p className="text-xs font-semibold text-muted-foreground leading-relaxed max-w-sm">
                 "Viewi's custom analytics dashboard let us isolate referring domains, optimize profile layouts, and redirect visitors to campaign funnels with 100% precision."
               </p>
             </div>
@@ -791,13 +781,13 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" className="w-10 h-10 rounded-full object-cover border border-white/10" />
                 <div className="flex flex-col">
-                  <span className="text-xs font-black text-white leading-tight">Nicholas Vance</span>
-                  <span className="text-[9.5px] font-bold text-white/40 uppercase tracking-widest mt-0.5">VP of Product, Cloud Tech</span>
+                  <span className="text-xs font-black text-foreground dark:text-white leading-tight">Nicholas Vance</span>
+                  <span className="text-[9.5px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">VP of Product, Cloud Tech</span>
                 </div>
               </div>
               
               {/* Linked brand logos */}
-              <div className="flex items-center gap-2 text-white/20">
+              <div className="flex items-center gap-2 text-muted-foreground/70">
                 <Github className="w-4 h-4" />
                 <Linkedin className="w-4 h-4" />
               </div>
@@ -825,12 +815,12 @@ export default function Home() {
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest block">BIO-LINK GENERATED VALUE</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">BIO-LINK GENERATED VALUE</span>
                 <p className="text-3xl font-black text-white tracking-tight">$8,234.00</p>
                 <p className="text-[10px] font-bold text-green-400 leading-none uppercase mt-1 tracking-widest">+38% Engaged Leads This Month</p>
               </div>
 
-              <p className="text-xs font-semibold text-white/70 leading-relaxed max-w-sm">
+              <p className="text-xs font-semibold text-muted-foreground leading-relaxed max-w-sm">
                 "Consolidating my platforms into Viewi helped me secure high-end sponsorships and double my link-in-bio conversions instantly."
               </p>
             </div>
@@ -841,7 +831,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 5: COSMIC DARK FOOTER (PLG Username claim handle) */}
-      <section className="relative py-32 px-6 overflow-hidden bg-black flex flex-col items-center justify-center">
+      <section id="claim" className="relative py-32 px-6 overflow-hidden bg-background dark:bg-black flex flex-col items-center justify-center scroll-mt-24">
         {/* Deep black/indigo mesh gradient background glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(139,92,246,0.15),transparent_60%)] pointer-events-none -z-10" />
 
@@ -850,25 +840,25 @@ export default function Home() {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-[120px] bg-violet-600/20 blur-[16px] pointer-events-none z-0" />
 
         <div className="max-w-4xl mx-auto text-center space-y-8 z-10 relative">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none text-white">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none text-foreground dark:text-white">
             Expansion potential of your <br />
             <span className="gradient-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400">digital presence</span>
           </h2>
 
-          <p className="text-sm sm:text-base text-white/60 max-w-xl mx-auto leading-relaxed font-semibold">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed font-semibold">
             Claim your unique professional handle, consolidate your links into an organic layout, and watch your visitor metrics soar. 100% free setup in seconds.
           </p>
 
           {/* PLG Claim Handle Form Card */}
-          <div className="max-w-md mx-auto p-2 bg-[#13141a]/90 border border-white/10 rounded-2xl flex flex-col sm:flex-row items-center gap-2 shadow-[0_32px_64px_rgba(0,0,0,0.6)] backdrop-blur-md">
+          <div className="max-w-md mx-auto p-2 glass-card rounded-2xl flex flex-col sm:flex-row items-center gap-2 shadow-xl backdrop-blur-md">
             <div className="w-full flex items-center gap-1 px-4 py-2 sm:py-0">
-              <span className="text-sm font-bold text-white/30 tracking-tight">viewi.link/</span>
+              <span className="text-sm font-bold text-muted-foreground tracking-tight">viewi.link/</span>
               <input
                 type="text"
                 placeholder="username"
                 value={claimUsername}
                 onChange={(e) => setClaimUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, ''))}
-                className="w-full bg-transparent border-none text-sm font-black text-white focus:outline-none placeholder:text-white/20 select-text"
+                className="w-full bg-transparent border-none text-sm font-black text-foreground dark:text-white focus:outline-none placeholder:text-muted-foreground/70 select-text"
               />
             </div>
             
@@ -880,7 +870,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-8 text-[10px] font-bold text-white/20 uppercase tracking-widest pt-4">
+          <div className="flex items-center justify-center gap-8 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest pt-4">
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-violet-400" /> Free Setup</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-violet-400" /> No credit card required</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-violet-400" /> Cancel anytime</span>
@@ -890,17 +880,17 @@ export default function Home() {
       </section>
 
       {/* FOOTER segment */}
-      <footer className="py-12 border-t border-white/5 bg-black z-10 relative">
+      <footer className="py-12 border-t border-border bg-background z-10 relative">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <img src="/logo.png" alt="Viewi" className="w-8 h-8 object-contain" />
             <span className="text-lg font-black tracking-tighter gradient-text">Viewi</span>
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">&copy; 2026 Viewi. All rights reserved.</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">&copy; 2026 Viewi. All rights reserved.</p>
           <div className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest">
-            <Link href="/privacy" className="text-white/30 hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-white/30 hover:text-white transition-colors">Terms of Service</Link>
-            <a href="mailto:support@viewi.link" className="text-white/30 hover:text-white transition-colors">Support</a>
+            <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link>
+            <a href="mailto:support@viewi.link" className="text-muted-foreground hover:text-foreground transition-colors">Support</a>
           </div>
         </div>
       </footer>

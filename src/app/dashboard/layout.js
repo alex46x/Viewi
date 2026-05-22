@@ -15,6 +15,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
@@ -51,7 +52,7 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-foreground flex selection:bg-primary/30" suppressHydrationWarning>
+    <div className="min-h-screen bg-background text-foreground flex selection:bg-primary/30" suppressHydrationWarning>
       {/* Background Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10" suppressHydrationWarning>
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]" />
@@ -59,14 +60,14 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Sidebar - Desktop */}
-      <aside className="w-72 border-r border-white/5 bg-black/40 backdrop-blur-2xl hidden md:flex flex-col fixed h-full z-40" suppressHydrationWarning>
+      <aside className="w-72 border-r border-border bg-background/80 backdrop-blur-2xl hidden md:flex flex-col fixed h-full z-40" suppressHydrationWarning>
         <div className="p-8">
           <Logo />
         </div>
         
         {/* User Card in Sidebar */}
         <div className="px-6 mb-8" suppressHydrationWarning>
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-3" suppressHydrationWarning>
+          <div className="p-4 rounded-2xl surface-panel flex items-center gap-3" suppressHydrationWarning>
              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden" suppressHydrationWarning>
                 {user?.image ? (
                   <img src={user.image} alt="User" className="w-full h-full object-cover" />
@@ -95,19 +96,23 @@ export default function DashboardLayout({ children }) {
           </div>
         </div>
 
-        <div className="p-6 mt-auto">
+        <div className="p-6 mt-auto space-y-3">
+          <div className="flex items-center justify-between px-2">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Theme</span>
+            <ThemeToggle variant="compact" />
+          </div>
           <LogoutButton onLogout={handleLogout} />
         </div>
       </aside>
 
       {/* Sidebar - Mobile Drawer */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 w-80 bg-[#09090b]/95 backdrop-blur-2xl border-r border-white/10 z-[60] p-6 flex flex-col transition-transform duration-500 ease-out md:hidden",
+        "fixed inset-y-0 left-0 w-80 bg-background/95 backdrop-blur-2xl border-r border-border z-[60] p-6 flex flex-col transition-transform duration-500 ease-out md:hidden",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex items-center justify-between mb-10">
           <Logo />
-          <button onClick={() => setIsSidebarOpen(false)} className="p-2 text-muted-foreground hover:text-white transition-colors">
+          <button onClick={() => setIsSidebarOpen(false)} className="p-2 text-muted-foreground hover:text-foreground transition-colors">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -124,7 +129,11 @@ export default function DashboardLayout({ children }) {
           </Link>
         </div>
 
-        <div className="mt-auto pt-6 border-t border-white/5">
+        <div className="mt-auto pt-6 border-t border-border space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Theme</span>
+            <ThemeToggle variant="compact" />
+          </div>
           <LogoutButton onLogout={handleLogout} />
         </div>
       </aside>
@@ -144,14 +153,15 @@ export default function DashboardLayout({ children }) {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="p-2 -ml-2 text-muted-foreground hover:text-white transition-colors"
+              className="p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-xl font-bold capitalize tracking-tight text-white">
+            <h1 className="text-xl font-bold capitalize tracking-tight text-foreground">
               {pathname.split('/').pop() === 'dashboard' ? 'Overview' : pathname.split('/').pop()}
             </h1>
           </div>
+          <ThemeToggle variant="compact" />
         </header>
 
         <div className="p-6 md:p-12 max-w-7xl mx-auto animate-entrance">
@@ -169,7 +179,7 @@ function Logo() {
         <span className="relative z-10">V</span>
         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
       </div>
-      <span className="text-2xl font-black tracking-tighter text-white">Viewi</span>
+      <span className="text-2xl font-black tracking-tighter text-foreground">Viewi</span>
     </div>
   );
 }
@@ -195,8 +205,8 @@ function NavLinks({ pathname, onNavItemClick }) {
             className={cn(
               "flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all duration-300 group text-sm font-bold relative overflow-hidden",
               isActive 
-                ? "text-white bg-white/[0.05] border border-white/10" 
-                : "text-muted-foreground hover:text-white hover:bg-white/[0.02]"
+                ? "text-foreground bg-foreground/[0.05] border border-border" 
+                : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.02]"
             )}
           >
             {isActive && (

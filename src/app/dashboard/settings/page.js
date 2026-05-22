@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, Bell, Trash2, AlertCircle, Loader2 } from 'lucide-react';
+import { Shield, Bell, Trash2, AlertCircle, Loader2, Sun, Moon } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { theme } = useTheme();
   const [notifications, setNotifications] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -34,18 +37,34 @@ export default function SettingsPage() {
     <div className="max-w-4xl space-y-8 animate-in fade-in duration-500">
       <div className="glass-card p-6 sm:p-8 rounded-[2rem] space-y-6">
         <h2 className="text-xl font-bold flex items-center gap-2">
+          {theme === 'dark' ? <Moon className="w-5 h-5 text-primary" /> : <Sun className="w-5 h-5 text-amber-500" />}
+          Appearance
+        </h2>
+        <div className="flex items-center justify-between p-4 surface-panel rounded-xl">
+          <div>
+            <p className="font-medium">Theme</p>
+            <p className="text-sm text-muted-foreground">
+              Switch between light and dark mode across the dashboard.
+            </p>
+          </div>
+          <ThemeToggle variant="pill" />
+        </div>
+      </div>
+
+      <div className="glass-card p-6 sm:p-8 rounded-[2rem] space-y-6">
+        <h2 className="text-xl font-bold flex items-center gap-2">
           <Shield className="w-5 h-5 text-blue-500" />
           Security & Privacy
         </h2>
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+          <div className="flex items-center justify-between p-4 surface-panel rounded-xl">
             <div>
               <p className="font-medium">Email Address</p>
               <p className="text-sm text-muted-foreground">mrx46@example.com</p>
             </div>
             <button className="text-sm font-semibold text-blue-400 hover:text-blue-300">Change</button>
           </div>
-          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+          <div className="flex items-center justify-between p-4 surface-panel rounded-xl">
             <div>
               <p className="font-medium">Password</p>
               <p className="text-sm text-muted-foreground">Last updated 2 months ago</p>
