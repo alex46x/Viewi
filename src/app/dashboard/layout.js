@@ -12,6 +12,7 @@ import {
   X,
   LayoutDashboard,
   LogOut,
+  Share2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -177,6 +178,7 @@ function NavLinks({ pathname, onNavItemClick }) {
   const menuItems = [
     { name: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
     { name: 'Profile', icon: UserIcon, href: '/dashboard/profile' },
+    { name: 'Social Connects', icon: Share2, href: '/dashboard/socials' },
     { name: 'Analytics', icon: BarChart3, href: '/dashboard/analytics' },
     { name: 'Settings', icon: Settings, href: '/dashboard/settings' },
   ];

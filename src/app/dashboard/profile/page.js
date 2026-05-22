@@ -127,7 +127,7 @@ export default function ProfilePage() {
   const addSocialLink = () => {
     setUser({
       ...user,
-      socialLinks: [...user.socialLinks, { platform: 'website', url: '' }]
+      socialLinks: [...(user.socialLinks || []), { platform: 'website', url: '' }]
     });
   };
 
@@ -150,6 +150,8 @@ export default function ProfilePage() {
     setUser({ ...user, socialLinks: newList });
     setActiveDropdownIdx(null); // Close dropdown on select
   };
+
+
   
   const handleFileSelect = (e) => {
     const file = e.target.files?.[0] || e.dataTransfer?.files?.[0];
@@ -231,6 +233,14 @@ export default function ProfilePage() {
   return (
     <div className="max-w-3xl mx-auto space-y-5">
       <form onSubmit={handleUpdate} className="space-y-5">
+        {error && (
+          <div className="p-3 text-xs font-semibold text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-between animate-in fade-in duration-300">
+            <span>{error}</span>
+            <button type="button" onClick={() => setError('')} className="text-red-400/50 hover:text-red-400">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
         
         {/* Sleek Profile Settings Grid */}
         <div className="glass-card p-4 sm:p-5 rounded-[2rem] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent space-y-4">
@@ -370,24 +380,24 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Social Links */}
-        <div className="glass-card p-4 sm:p-5 rounded-[2rem] space-y-4 border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
+        {/* Social Links Editor Card */}
+        <div className="glass-card p-4 sm:p-5 rounded-[2rem] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent space-y-4 animate-in fade-in duration-300">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-1 h-4 bg-accent rounded-full" />
-              <h2 className="text-sm sm:text-base font-black text-white tracking-tight">Social Connects</h2>
+              <div className="w-1 h-3.5 bg-accent rounded-full" />
+              <h2 className="text-xs sm:text-sm font-black text-white tracking-tight uppercase">Social Connects</h2>
             </div>
             <button
               type="button"
               onClick={addSocialLink}
-              className="px-3.5 py-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-all flex items-center gap-1.5 text-[10px] font-bold active:scale-95 border border-accent/20 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl bg-accent/10 text-accent hover:bg-accent/20 transition-all flex items-center gap-1.5 text-[10px] font-black active:scale-95 border border-accent/20 cursor-pointer uppercase tracking-wider"
             >
               <Plus className="w-3.5 h-3.5" /> Link Platform
             </button>
           </div>
 
-          <div className="space-y-2">
-            {user?.socialLinks?.map((link, index) => {
+          <div className="space-y-2.5">
+            {(user?.socialLinks || []).map((link, index) => {
               const platforms = [
                 { id: 'website', name: 'Personal Website', placeholder: 'https://yourwebsite.com' },
                 { id: 'linkedin', name: 'LinkedIn', placeholder: 'https://linkedin.com/in/username' },
@@ -426,7 +436,7 @@ export default function ProfilePage() {
                       >
                         <div className="flex items-center gap-1.5 min-w-0">
                           <Icon className="w-3.5 h-3.5 text-primary shrink-0" />
-                          <span className="truncate text-white text-[11px]">{currentPlatform.name}</span>
+                          <span className="truncate text-white text-[11px] font-bold">{currentPlatform.name}</span>
                         </div>
                         <ChevronDown className={cn("w-3 h-3 text-white/20 transition-transform duration-300 shrink-0", activeDropdownIdx === index && "rotate-180 text-primary")} />
                       </button>
@@ -464,7 +474,7 @@ export default function ProfilePage() {
                         type="url"
                         className="w-full h-9 pl-3 pr-8 rounded-lg bg-white/5 border border-white/10 text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 hover:bg-white/[0.08] transition-all font-medium tracking-tight text-white"
                         placeholder={currentPlatform.placeholder}
-                        value={link.url}
+                        value={link.url || ''}
                         onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
                         onBlur={(e) => updateSocialLink(index, 'url', normalizeSocialLink(link.platform, e.target.value))}
                       />
@@ -487,12 +497,12 @@ export default function ProfilePage() {
               );
             })}
             
-            {user?.socialLinks?.length === 0 && (
-              <div className="text-center py-10 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
-                <Globe className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground text-xs font-medium">Your profile is missing social connects.</p>
-                <p className="text-[10px] text-muted-foreground/60 mt-0.5">Add links to your favorite platforms to get started.</p>
-              </div>
+            {(!user?.socialLinks || user.socialLinks.length === 0) && (
+               <div className="text-center py-10 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+                 <Globe className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
+                 <p className="text-muted-foreground text-xs font-medium">Your profile is missing social connects.</p>
+                 <p className="text-[10px] text-muted-foreground/60 mt-0.5">Add links to your favorite platforms to get started.</p>
+               </div>
             )}
           </div>
         </div>
@@ -584,6 +594,7 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
+
 
       {/* Delete Confirmation Modal */}
       {linkToDelete !== null && (

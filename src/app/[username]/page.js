@@ -19,6 +19,19 @@ import {
 import Link from 'next/link';
 import { UAParser } from 'ua-parser-js';
 
+function formatFollowerCount(count) {
+  if (count === undefined || count === null || isNaN(count)) return '0';
+  if (count >= 1000000) {
+    const formatted = (count / 1000000).toFixed(1);
+    return formatted.endsWith('.0') ? `${formatted.slice(0, -2)}M` : `${formatted}M`;
+  }
+  if (count >= 1000) {
+    const formatted = (count / 1000).toFixed(1);
+    return formatted.endsWith('.0') ? `${formatted.slice(0, -2)}K` : `${formatted}K`;
+  }
+  return count.toLocaleString();
+}
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
@@ -292,8 +305,15 @@ export default async function ProfilePage({ params }) {
                       {link.platform === 'website' ? 'My Website' : link.platform}
                     </span>
                   </div>
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/[0.02] border border-white/5 opacity-0 group-hover:opacity-100 group-hover:bg-white/[0.05] transition-all duration-300 relative z-10">
-                    <ChevronRight className="w-4 h-4 text-white/60 group-hover:translate-x-0.5 transition-transform duration-300" />
+                  <div className="flex items-center gap-2 relative z-10 shrink-0">
+                    {link.showFollowers && typeof link.followerCount === 'number' && (
+                      <div className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/5 border border-white/10 text-white/70 shadow-sm transition-all duration-300 group-hover:bg-white/10 group-hover:text-white">
+                        {formatFollowerCount(link.followerCount)} {link.platform === 'youtube' ? 'subs' : 'followers'}
+                      </div>
+                    )}
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/[0.02] border border-white/5 opacity-0 group-hover:opacity-100 group-hover:bg-white/[0.05] transition-all duration-300 relative">
+                      <ChevronRight className="w-4 h-4 text-white/60 group-hover:translate-x-0.5 transition-transform duration-300" />
+                    </div>
                   </div>
                 </a>
               );

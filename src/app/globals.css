@@ -195,3 +195,52 @@
   animation: entrance-fade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slide-down 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Analytics dashboard */
+.analytics-hero-card {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.22) 0%, rgba(59, 130, 246, 0.12) 45%, rgba(9, 9, 11, 0.4) 100%);
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow:
+    0 8px 32px -8px rgba(139, 92, 246, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.analytics-metric-card {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+.analytics-chart-surface {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+.analytics-rank-badge {
+  @apply w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-black tabular-nums shrink-0;
+}
+
+.analytics-bar-glow {
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.25);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-white/15 rounded-full;
+}
+
