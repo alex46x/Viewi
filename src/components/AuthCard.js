@@ -7,10 +7,8 @@ import {
   Mail, 
   Lock, 
   User, 
-  ArrowRight, 
   Loader2, 
   X,
-  Github,
   Eye,
   EyeOff
 } from 'lucide-react';
@@ -160,207 +158,310 @@ export default function AuthCard({ initialMode = 'signup' }) {
   };
 
   return (
-    <div className="w-full max-w-[440px] animate-in fade-in zoom-in-95 duration-500">
-      <div className="glass-card p-8 md:p-10 rounded-[40px] relative overflow-hidden">
-        {/* Close Button - Redirects to Homepage */}
-        <Link 
-          href="/"
-          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all text-white/40 hover:text-white hover:scale-110 active:scale-95 z-20 cursor-pointer"
-        >
-          <X className="w-5 h-5" />
-        </Link>
-
-        {authStep === 'username-select' ? (
-          <div className="animate-in slide-in-from-right-8 duration-500">
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-gradient-to-tr from-violet-600 to-indigo-600 rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-2xl shadow-violet-500/30">
-                <User className="w-10 h-10 text-white" />
-              </div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
-                Pick a username
-              </h1>
-              <p className="text-white/40 text-sm font-medium">
-                Choose a unique name for your Viewi profile
-              </p>
+    <div className="w-full max-w-[440px] md:max-w-[940px] animate-in fade-in zoom-in-95 duration-500 relative z-10 select-none">
+      <div className="bg-white rounded-[2.5rem] border border-gray-100/80 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] relative overflow-hidden grid grid-cols-1 md:grid-cols-12 p-3 md:p-4 gap-4 md:gap-6">
+        
+        {/* Left Column: Auth Form */}
+        <div className="col-span-12 md:col-span-6 flex flex-col justify-between p-4 sm:p-6 md:p-8 min-h-[480px] bg-gradient-to-br from-white via-white to-amber-50/40 relative">
+          
+          {/* Top segment: Logo & Close Button (Close button only visible on mobile here) */}
+          <div className="flex items-center justify-between w-full mb-6">
+            <div className="inline-flex items-center gap-2 border border-gray-200/80 rounded-full px-4 py-1.5 bg-white shadow-sm">
+              <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 shadow-sm" />
+              <span className="font-extrabold text-[11px] text-gray-800 tracking-wider">Viewi</span>
             </div>
-
-            <form onSubmit={handleUsernameSubmit} className="space-y-4">
-              {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium rounded-2xl animate-bounce">
-                  {error}
-                </div>
-              )}
-
-              <div className="relative group">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
-                <input
-                  type="text"
-                  required
-                  autoFocus
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
-                  placeholder="Username"
-                  value={chosenUsername}
-                  onChange={(e) => setChosenUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, ''))}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 mt-6 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-extrabold rounded-2xl hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-white/10 relative overflow-hidden group/btn cursor-pointer"
-              >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Complete Setup'}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setAuthStep('initial')}
-                className="w-full py-4 text-sm font-bold text-white/40 hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
-            </form>
+            
+            <Link 
+              href="/"
+              className="md:hidden p-2 rounded-full bg-white hover:bg-gray-50 border border-gray-100 shadow-sm transition-all hover:scale-105 active:scale-95 text-gray-500 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </Link>
           </div>
-        ) : (
-          <>
-            {/* Toggle Pill */}
-            <div className="flex justify-center mb-10">
-              <div className="p-1 bg-black/40 rounded-full flex relative w-[220px]">
-                <div 
-                  className={cn(
-                    "absolute inset-y-1 w-[108px] bg-white/10 rounded-full transition-all duration-300 ease-out",
-                    mode === 'signup' ? "translate-x-0" : "translate-x-[100px]"
-                  )}
-                />
-                <button 
-                  onClick={() => setMode('signup')}
-                  className={cn(
-                    "flex-1 py-2 text-sm font-bold rounded-full relative z-10 transition-colors",
-                    mode === 'signup' ? "text-white" : "text-white/40"
-                  )}
-                >
-                  Sign up
-                </button>
-                <button 
-                  onClick={() => setMode('signin')}
-                  className={cn(
-                    "flex-1 py-2 text-sm font-bold rounded-full relative z-10 transition-colors",
-                    mode === 'signin' ? "text-white" : "text-white/40"
-                  )}
-                >
-                  Sign in
-                </button>
-              </div>
-            </div>
 
-            <div className="text-center mb-10">
-              <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2 transition-all duration-300">
-                {mode === 'signup' ? 'Create an account' : 'Welcome back'}
-              </h1>
-              <p className="text-white/40 text-sm font-medium">
-                {mode === 'signup' ? 'Start building your digital identity today' : 'Sign in to access your dashboard'}
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium rounded-2xl animate-shake">
-                  {error}
+          {authStep === 'username-select' ? (
+            <div className="animate-in slide-in-from-right-8 duration-500 my-auto">
+              <div className="text-center mb-6">
+                <div className="w-14 h-14 bg-gradient-to-tr from-amber-300 to-amber-400 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-xl shadow-amber-300/10">
+                  <User className="w-6 h-6 text-gray-800" />
                 </div>
-              )}
-
-              {mode === 'signup' && (
-                <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
-                  <input
-                    type="text"
-                    required
-                    className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
-                    placeholder="Username"
-                    value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  />
-                </div>
-              )}
-
-              <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
-                <input
-                  type="email"
-                  required
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
+                <h2 className="text-xl font-black text-gray-800 tracking-tight mb-1">
+                  Pick a username
+                </h2>
+                <p className="text-gray-400 text-xs font-semibold max-w-[200px] mx-auto leading-relaxed">
+                  Choose a unique handle for your Viewi link-in-bio page
+                </p>
               </div>
 
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/25 group-focus-within:text-primary transition-colors" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl pl-12 pr-12 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:bg-white/[0.06] hover:border-white/20 transition-all"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
+              <form onSubmit={handleUsernameSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-100 text-red-500 text-xs font-bold rounded-2xl animate-bounce">
+                    {error}
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-400 pl-4 uppercase tracking-wider">Handle</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      autoFocus
+                      className="w-full bg-gray-50/80 hover:bg-gray-100/50 focus:bg-white border border-gray-100/60 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 rounded-full px-5 py-3.5 text-xs text-gray-800 placeholder:text-gray-300 transition-all focus:outline-none"
+                      placeholder="username"
+                      value={chosenUsername}
+                      onChange={(e) => setChosenUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, ''))}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3.5 mt-4 bg-[#fcd34d] hover:bg-[#fbbf24] disabled:bg-amber-200 text-gray-900 font-extrabold rounded-full hover:shadow-[0_8px_20px_rgba(252,211,77,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 relative overflow-hidden cursor-pointer text-xs uppercase tracking-wider"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin text-gray-900" /> : 'Complete Setup'}
+                </button>
+
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-white/40 hover:text-white hover:scale-110 active:scale-95 transition-all cursor-pointer z-10"
+                  onClick={() => setAuthStep('initial')}
+                  className="w-full py-3 text-xs font-bold text-gray-400 hover:text-gray-700 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  Cancel
                 </button>
+              </form>
+            </div>
+          ) : (
+            <div className="my-auto">
+              <div className="text-left mb-6">
+                <h2 className="text-2xl font-black text-gray-800 tracking-tight mb-1">
+                  {mode === 'signup' ? 'Create an account' : 'Welcome back'}
+                </h2>
+                <p className="text-gray-400 text-xs font-semibold max-w-[280px] leading-relaxed">
+                  {mode === 'signup' ? 'Sign up and claim your unique link-in-bio page today' : 'Sign in to access your traffic analytics'}
+                </p>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 mt-6 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-extrabold rounded-2xl hover:opacity-90 hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-xl shadow-violet-500/20 border border-white/10 relative overflow-hidden group/btn cursor-pointer"
-              >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    {mode === 'signup' ? 'Create an account' : 'Sign in to account'}
-                    {!loading && <ArrowRight className="w-4 h-4 ml-1" />}
-                  </>
+              <form onSubmit={handleSubmit} className="space-y-3.5">
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-100 text-red-500 text-xs font-bold rounded-2xl animate-shake">
+                    {error}
+                  </div>
                 )}
-              </button>
-            </form>
 
-            <div className="mt-10 mb-8 flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/5" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/20">OR SIGN {mode === 'signup' ? 'UP' : 'IN'} WITH</span>
-              <div className="h-px flex-1 bg-white/5" />
+                {mode === 'signup' && (
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-gray-400 pl-4 uppercase tracking-wider">Username</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        required
+                        className="w-full bg-gray-50/80 hover:bg-gray-100/50 focus:bg-white border border-gray-100/60 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 rounded-full px-5 py-3.5 text-xs text-gray-800 placeholder:text-gray-300 transition-all focus:outline-none"
+                        placeholder="choose_a_username"
+                        value={formData.username}
+                        onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, '') })}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-400 pl-4 uppercase tracking-wider">Email</label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      required
+                      className="w-full bg-gray-50/80 hover:bg-gray-100/50 focus:bg-white border border-gray-100/60 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 rounded-full px-5 py-3.5 text-xs text-gray-800 placeholder:text-gray-300 transition-all focus:outline-none"
+                      placeholder="yourname@domain.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-400 pl-4 uppercase tracking-wider">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      required
+                      className="w-full bg-gray-50/80 hover:bg-gray-100/50 focus:bg-white border border-gray-100/60 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 rounded-full pl-5 pr-11 py-3.5 text-xs text-gray-800 placeholder:text-gray-300 transition-all focus:outline-none"
+                      placeholder="••••••••"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-gray-300 hover:text-gray-500 transition-all cursor-pointer z-10"
+                    >
+                      {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3.5 mt-2 bg-[#fcd34d] hover:bg-[#fbbf24] disabled:bg-amber-200 text-gray-900 font-extrabold rounded-full hover:shadow-[0_8px_20px_rgba(252,211,77,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 relative overflow-hidden cursor-pointer text-xs uppercase tracking-wider"
+                >
+                  {loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-900" />
+                  ) : (
+                    mode === 'signup' ? 'Create Account' : 'Sign In'
+                  )}
+                </button>
+              </form>
+
+              <div className="flex items-center gap-3 my-4">
+                <div className="h-px flex-1 bg-gray-100" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">or connect with</span>
+                <div className="h-px flex-1 bg-gray-100" />
+              </div>
+
+              <div className="mt-4">
+                <button 
+                  type="button" 
+                  onClick={handleGoogleLogin} 
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2.5 py-3 border border-gray-200 hover:bg-gray-50 rounded-full transition-all active:scale-[0.98] cursor-pointer shadow-sm bg-white"
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                  </svg>
+                  <span className="text-xs font-bold text-gray-700">Continue with Google</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Form Footer links */}
+          <div className="mt-8 flex justify-center w-full text-[11px] text-gray-400 font-semibold tracking-wide">
+            <div>
+              {mode === 'signup' ? (
+                <span>
+                  Have an account?{' '}
+                  <button 
+                    onClick={() => { setMode('signin'); setError(''); }}
+                    className="text-amber-500 hover:text-amber-600 font-bold ml-1 cursor-pointer transition-colors"
+                  >
+                    Sign in
+                  </button>
+                </span>
+              ) : (
+                <span>
+                  New to Viewi?{' '}
+                  <button 
+                    onClick={() => { setMode('signup'); setError(''); }}
+                    className="text-amber-500 hover:text-amber-600 font-bold ml-1 cursor-pointer transition-colors"
+                  >
+                    Sign up
+                  </button>
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Illustration + Floating Glass Widgets */}
+        <div className="col-span-12 md:col-span-6 hidden md:flex flex-col relative rounded-[2.2rem] overflow-hidden border border-gray-100 min-h-[520px]">
+          <div className="absolute inset-0 z-0">
+            <img 
+              src="/auth_illustration.png" 
+              alt="Viewi Collaborative Network" 
+              className="w-full h-full object-cover select-none" 
+            />
+            {/* Cinematic subtle gradients over image */}
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 via-transparent to-transparent" />
+          </div>
+
+          {/* Close Button overlaying the illustration */}
+          <Link 
+            href="/"
+            className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white hover:bg-gray-50 border border-gray-100 shadow-sm transition-all hover:scale-105 active:scale-95 text-gray-500 cursor-pointer flex items-center justify-center"
+          >
+            <X className="w-3.5 h-3.5" />
+          </Link>
+
+          {/* Overlay Interactive Glassmorphic Widgets */}
+          <div className="relative z-10 w-full h-full flex flex-col justify-between p-6 pointer-events-none select-none">
+            
+            {/* Widget 1: Task Review */}
+            <div className="absolute top-10 left-8 z-10 flex flex-col gap-2 pointer-events-none select-none">
+              <div className="px-4 py-3 rounded-2xl bg-[#fcd34d] shadow-[0_12px_24px_rgba(252,211,77,0.15)] border border-amber-300/30 flex flex-col gap-0.5 max-w-[210px] transform hover:-rotate-1 transition-transform">
+                <span className="text-[10px] font-black text-gray-900 tracking-tight leading-snug">Task Review With Team</span>
+                <span className="text-[8px] font-bold text-gray-700/80 leading-none">09:30am - 10:00am</span>
+              </div>
+              <div className="ml-6 px-3 py-1.5 rounded-full bg-gray-900/80 backdrop-blur-md border border-white/5 shadow-lg flex items-center self-start">
+                <span className="text-[7.5px] font-extrabold text-white/60 tracking-wider">09:30am - 10:00am</span>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <button 
-                type="button" 
-                onClick={handleGoogleLogin} 
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-3 py-4 bg-white/[0.02] hover:bg-white/10 border border-white/10 hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] rounded-2xl transition-all group active:scale-[0.98] disabled:opacity-50 cursor-pointer"
-              >
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
-                  <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
-                  <path fill="#34A853" d="M16.04 18.013c-1.09.693-2.43 1.078-3.82 1.078-3.34 0-6.218-2.174-7.37-5.176l-4.012 3.11c1.93 3.997 5.992 6.756 10.712 6.756 2.924 0 5.461-1.011 7.212-2.72l-4.04-3.048Z" />
-                  <path fill="#4A90E2" d="M19.834 7.5c.204.643.321 1.332.321 2.053 0 1.954-.643 3.614-1.761 4.795l4.04 3.048C24.364 15.65 25 12.87 25 9.553c0-.643-.058-1.264-.166-1.854h-12.834v4.545h7.834Z" />
-                  <path fill="#FBBC05" d="M5.266 14.235a7.074 7.074 0 0 1-.366-2.235c0-.776.132-1.522.366-2.235L1.24 6.65a11.83 11.83 0 0 0-.585 5.35c0 1.883.433 3.655 1.196 5.23l4.012-3.11c-.381-.82-.597-1.74-.597-2.885Z" />
-                </svg>
-                <span className="text-sm font-bold text-white/90">Continue with Google</span>
-              </button>
+            {/* Widget 2: Overlapping Creator Avatars */}
+            <div className="absolute right-8 top-28 z-10 flex flex-col gap-2 pointer-events-none select-none">
+              <div className="relative w-20 h-20">
+                <div className="absolute top-0 left-0 w-8.5 h-8.5 rounded-full border-2 border-white overflow-hidden shadow-md">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" className="w-full h-full object-cover" />
+                </div>
+                <div className="absolute top-4 right-0 w-8.5 h-8.5 rounded-full border-2 border-white overflow-hidden shadow-md">
+                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80" className="w-full h-full object-cover" />
+                </div>
+                <div className="absolute bottom-0 left-3 w-8.5 h-8.5 rounded-full border-2 border-white overflow-hidden shadow-md">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" className="w-full h-full object-cover" />
+                </div>
+              </div>
             </div>
-          </>
-        )}
 
-        <p className="mt-8 text-center text-[10px] text-white/20 font-medium max-w-[280px] mx-auto leading-relaxed">
-          By continuing, you agree to our 
-          <Link href="/terms" className="text-white/40 hover:text-white underline underline-offset-4 transition-colors mx-1">Terms of Service</Link> 
-          and 
-          <Link href="/privacy" className="text-white/40 hover:text-white underline underline-offset-4 transition-colors mx-1">Privacy Policy</Link>
-        </p>
+            {/* Widget 3: Weekly Calendar Card */}
+            <div className="absolute bottom-28 right-6 z-10 w-[230px] p-4 rounded-3xl bg-white/30 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.04)] flex flex-col gap-2.5 pointer-events-none select-none">
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  <div className="flex flex-col items-center">
+                    <span className="text-[7.5px] font-bold text-gray-800/50">Sun</span>
+                    <span className="text-[9.5px] font-black text-gray-800">22</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[7.5px] font-bold text-gray-800/50">Mon</span>
+                    <span className="text-[9.5px] font-black text-gray-800">23</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[7.5px] font-bold text-gray-800/50">Tue</span>
+                    <span className="text-[9.5px] font-black text-gray-800">24</span>
+                  </div>
+                  <div className="flex flex-col items-center px-1.5 py-0.5 rounded-lg bg-white/70 border border-white/30 shadow-sm">
+                    <span className="text-[7.5px] font-black text-gray-900">Wed</span>
+                    <span className="text-[9.5px] font-black text-amber-500">25</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[7.5px] font-bold text-gray-800/50">Thu</span>
+                    <span className="text-[9.5px] font-black text-gray-800">26</span>
+                  </div>
+                </div>
+                {/* Diagonal frosted stripes decor */}
+                <div className="w-10 h-6 opacity-30" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 4px)', backgroundSize: '6px 6px' }} />
+              </div>
+            </div>
+
+            {/* Widget 4: Daily Meeting Card */}
+            <div className="absolute bottom-6 left-6 z-10 p-3.5 rounded-2xl bg-white shadow-[0_12px_32px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col gap-2 w-[180px] pointer-events-none select-none">
+              <div>
+                <p className="text-[9.5px] font-black text-gray-800 tracking-tight leading-none mb-0.5">Daily Meeting</p>
+                <p className="text-[7.5px] font-bold text-gray-400 leading-none">12:00pm - 01:00pm</p>
+              </div>
+              <div className="flex -space-x-1 overflow-hidden">
+                <img className="inline-block h-4.5 w-4.5 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80" />
+                <img className="inline-block h-4.5 w-4.5 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80" />
+                <img className="inline-block h-4.5 w-4.5 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=80&auto=format&fit=crop&q=80" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   );
