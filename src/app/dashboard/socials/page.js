@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 const SOCIAL_ICONS = {
   youtube: Youtube,
@@ -87,6 +88,8 @@ const SPARKLINE_PATHS = [
 ];
 
 export default function SocialsPage() {
+  notFound();
+  
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [user, setUser] = useState(null);
